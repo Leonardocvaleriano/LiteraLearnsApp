@@ -7,6 +7,14 @@ import com.codeplace.literalearnsapp.ui.baseViewModel.BaseViewModel
 
 class AuthenticationViewModel(private val literaLearnsRepository: LiteraLearnsRepository): BaseViewModel() {
 
-    val accountVallues = MutableLiveData<StateFlow>()
+    val tokenAuthenticated = MutableLiveData<StateFlow>()
 
+    fun getTokenAuthenticated(
+        clientId:String,
+        clientSecret:String,
+        authCode: String?,
+        grantType:String,
+        redirectUri:String) = fetchData(tokenAuthenticated) {
+        literaLearnsRepository.getTokenAuthenticated(clientId,clientSecret,authCode,grantType,redirectUri)
+    }
 }

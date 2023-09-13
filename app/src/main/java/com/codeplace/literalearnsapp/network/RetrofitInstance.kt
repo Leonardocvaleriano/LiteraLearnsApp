@@ -14,7 +14,7 @@ object RetrofitInstance {
 
         val client = OkHttpClient.Builder()
             .addInterceptor(logger)
-            .build()
+             .build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)

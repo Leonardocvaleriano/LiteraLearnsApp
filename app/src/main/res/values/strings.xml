@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">LiteraLearns App</string>
-    <string name="server_client_id">392812652952-msk4pq1d3qs54n08q9tovv97mhlmvtmj.apps.googleusercontent.com</string>
+    <string name="server_client_id">392812652952-nvthbfvt51da6v49ucq8b19p31p7627d.apps.googleusercontent.com</string>
+    <string name="client_secret">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</string>
+    <string name="grant_type">authorization_code</string>
+    <string name="scope">https://www.googleapis.com/auth/books</string>
+
+    <string name="redirect_uri">""</string>
+
+
+
 </resources>

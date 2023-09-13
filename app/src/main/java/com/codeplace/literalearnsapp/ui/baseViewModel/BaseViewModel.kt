@@ -43,11 +43,4 @@ open class BaseViewModel:ViewModel() {
         }
     }
 
-//    fun fetchAccountValues(
-//        liveData: MutableLiveData<StateFlow>,
-//        service: suspend () -> Response<*>){
-//
-//    }
-//
-
 }

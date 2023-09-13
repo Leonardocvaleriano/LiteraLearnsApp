@@ -1,5 +1,6 @@
 package com.codeplace.literalearnsapp
 
+import android.content.SharedPreferences
 import com.codeplace.literalearnsapp.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -19,6 +20,8 @@ class LiteraLearnsApplication:android.app.Application() {
     }
 
     companion object {
-        const val BASE_URL = "https://www.googleapis.com/"
-    }
+        const val BASE_URL_TOKEN = "https://oauth2.googleapis.com/"
+        const val BASE_URL_GOOGLE_API = "https://www.googleapis.com/books/v1/"
+
+     }
 }
