@@ -38,7 +38,6 @@ class GoogleSignInActivity : AppCompatActivity() {
 
     fun googleSignInSetup(){
         val serverClientId = getString(R.string.server_client_id)
-
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -53,13 +52,13 @@ class GoogleSignInActivity : AppCompatActivity() {
 
         // When your app starts, check if the user has already signed in to your app using Google,
         // on this device or another device, by calling silentSignIn:
-        mGoogleSignInClient.silentSignIn()
-            .addOnCompleteListener(this) { task -> handleSignInResult(task) }
+//        mGoogleSignInClient.silentSignIn()
+//            .addOnCompleteListener(this) { task -> handleSignInResult(task) }
 
         // This task is always completed immediately, there is no need to attach an
         // asynchronous listener.
-        val task = GoogleSignIn.getSignedInAccountFromIntent(mGoogleSignInClient.signInIntent)
-        handleSignInResult(task)
+//        val task = GoogleSignIn.getSignedInAccountFromIntent(mGoogleSignInClient.signInIntent)
+//        handleSignInResult(task)
 
 
         binding.signInButton.setOnClickListener {
