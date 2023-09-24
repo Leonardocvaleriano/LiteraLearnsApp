@@ -1,5 +1,6 @@
 package com.codeplace.literalearnsapp.di
 
+import com.codeplace.literalearnsapp.LiteraLearnsApplication.Companion.BASE_URL_GOOGLE_API
 import com.codeplace.literalearnsapp.LiteraLearnsApplication.Companion.BASE_URL_TOKEN
 import com.codeplace.literalearnsapp.repository.LiteraLearnsRepository
 import com.codeplace.literalearnsapp.ui.home.viewModel.AuthenticationViewModel
@@ -9,6 +10,7 @@ import org.koin.dsl.module
 
 val appModule = module{
 
-    single { LiteraLearnsRepository(BASE_URL_TOKEN) }
+
+    single { LiteraLearnsRepository(BASE_URL_TOKEN, BASE_URL_GOOGLE_API)}
     viewModel { AuthenticationViewModel(get()) }
 }

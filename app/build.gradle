@@ -3,24 +3,36 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+def localPropertiesFile = rootProject.file("local.properties")
+def localProperties = new Properties()
+localProperties.load(new FileInputStream(localPropertiesFile))
+
 android {
     namespace 'com.codeplace.literalearnsapp'
     compileSdk 33
 
     defaultConfig {
+
         applicationId "com.codeplace.literalearnsapp"
         minSdk 25
         targetSdk 33
         versionCode 1
         versionName "1.0"
 
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
         }
+        buildConfigField("String", "API_KEY", localProperties['apiKey'])
+
     }
 
     buildTypes {
+        debug{
+
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -29,6 +41,7 @@ android {
     buildFeatures {
         viewBinding = true
         compose true
+        buildConfig true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

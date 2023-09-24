@@ -49,6 +49,8 @@ import com.codeplace.literalearnsapp.ui.home.view.model.DefaulScreenContent
 import com.codeplace.literalearnsapp.ui.home.view.model.MyBooksContent
 import com.codeplace.literalearnsapp.ui.home.viewModel.AuthenticationViewModel
 import org.json.JSONObject
+import org.json.JSONStringer
+import org.json.JSONTokener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -64,7 +66,9 @@ class HomeActivity : AppCompatActivity() {
         val authCode = intent.getStringExtra("EXTRA_SERVER_AUTH_CODE")
         val personName = intent.getStringExtra("EXTRA_PERSON_NAME")
         val personEmail = intent.getStringExtra("EXTRA_PERSON_EMAIL")
-        
+
+        initValues(authCode)
+        initObservables()
 
         setContent {
             val screenTitleMyBooks = getString(R.string.screen_title_my_books)
@@ -106,15 +110,26 @@ class HomeActivity : AppCompatActivity() {
         viewModel.tokenAuthenticated.observe(this){
             when(it){
                 is StateFlow.Loading ->{loading(it.loading)}
-                is StateFlow.Success<*>->initTokenAuthenticated(it.data as JSONObject)
+                is StateFlow.Success<*>->initValues(it.data as JSONObject)
                 is StateFlow.Error->{errorMessage(it.errorMessage)}
 
             }
+            viewModel.readingNowBooks.observe(this){
+                when(it){
+                    is StateFlow.Loading -> {loading(it.loading)}
+                    is StateFlow.Success<*>-> initReadingNowShelf(it.data as JSONObject)
+                    is StateFlow.Error->{errorMessage(it.errorMessage)}
+                }
+            }
         }
     }
-    private fun initTokenAuthenticated(result:JSONObject) {
-        val test = result
+    private fun initValues(result: JSONObject) {
+        viewModel.getBookShelves(result)
     }
+    private fun initReadingNowShelf(result: JSONObject) {
+        val resultTest = result
+    }
+
 
 
     private fun errorMessage(errorMessage: String) {

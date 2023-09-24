@@ -2,13 +2,12 @@ package com.codeplace.literalearnsapp.network
 
 import retrofit2.Response
 import retrofit2.http.*
-import kotlin.collections.ArrayList
 
 interface API {
 
 
     // Get a specific bookshelve
-    //https://www.googleapis.com/books/v1/mylibrary/bookshelves/0/volumes?&key=AIzaSyA7QniVf2iaS8U100eVZX-24TlmrcCSJHM
+    // https://www.googleapis.com/books/v1/mylibrary/bookshelves/0/volumes?&key=AIzaSyA7QniVf2iaS8U100eVZX-24TlmrcCSJHM
 
     //exchangeAuthorizationCodeForToken
     @FormUrlEncoded
@@ -21,9 +20,10 @@ interface API {
         @Field("redirectUri") redirectUri:String):Response<Map<Any, *>>
 
 
-//    @GET("mylibrary/bookshelves")
-//    suspend fun getBookShelves():Response<Map<String, *>>
-
-
-
+//    @Headers("Authorization: Bearer accessToken")
+    @GET("mylibrary/bookshelves/{volumeId}/volumes?")
+    suspend fun getBookShelves(
+        @Path("volumeId")volumeId:Int,
+        @Query("key") apiKey:String,
+        @Header("Authorization")accessToken:String):Response<Map<String, *>>
 }
