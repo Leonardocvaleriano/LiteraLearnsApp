@@ -14,12 +14,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
@@ -28,7 +26,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,18 +43,17 @@ import com.codeplace.literalearnsapp.R
 import com.codeplace.literalearnsapp.databinding.ActivityHomeBinding
 import com.codeplace.literalearnsapp.stateFlow.StateFlow
 import com.codeplace.literalearnsapp.ui.home.view.model.DefaulScreenContent
-import com.codeplace.literalearnsapp.ui.home.view.model.MyBooksContent
-import com.codeplace.literalearnsapp.ui.home.viewModel.AuthenticationViewModel
+import com.codeplace.literalearnsapp.ui.home.view.model.ShelvesTitles
+import com.codeplace.literalearnsapp.ui.home.view.model.ShelvesContent
+import com.codeplace.literalearnsapp.ui.home.viewModel.LiteraLearnsViewModel
 import org.json.JSONObject
-import org.json.JSONStringer
-import org.json.JSONTokener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityHomeBinding
-    private val viewModel by viewModel<AuthenticationViewModel>()
+    private val viewModel by viewModel<LiteraLearnsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,15 +66,6 @@ class HomeActivity : AppCompatActivity() {
         initValues(authCode)
         initObservables()
 
-        setContent {
-            val screenTitleMyBooks = getString(R.string.screen_title_my_books)
-            val titleReadingNow = getString(R.string.title_reading_now)
-            val titleRead = getString(R.string.title_read)
-            val titleWantToRead = getString(R.string.title_want_to_read)
-            MyBooksScreen(
-                defaultScreenContent = DefaulScreenContent(screenTitleMyBooks),
-                myBooksContent = MyBooksContent(titleReadingNow, titleRead, titleWantToRead,"Cover Books Test"))
-        }
 
         // MessageCard(Messages("Leonardo", "This is the first Composable inside the app"))
 
@@ -102,35 +89,69 @@ class HomeActivity : AppCompatActivity() {
   }
 
 
-
     private fun initValues(authCode:String?) {
         viewModel.getTokenAuthenticated(getString(R.string.server_client_id),getString(R.string.client_secret),authCode,getString(R.string.grant_type),getString(R.string.redirect_uri))
     }
     private fun initObservables() {
-        viewModel.tokenAuthenticated.observe(this){
-            when(it){
-                is StateFlow.Loading ->{loading(it.loading)}
-                is StateFlow.Success<*>->initValues(it.data as JSONObject)
-                is StateFlow.Error->{errorMessage(it.errorMessage)}
-
+        viewModel.tokenAuthenticated.observe(this) {
+            when (it) {
+                is StateFlow.Loading -> {loading(it.loading)}
+                is StateFlow.Success<*> -> viewModel.getBookShelves(it.data as JSONObject)
+                is StateFlow.Error -> { errorMessage(it.errorMessage)}
             }
-            viewModel.readingNowBooks.observe(this){
+        }
+            viewModel.readingNowShelf.observe(this){
                 when(it){
                     is StateFlow.Loading -> {loading(it.loading)}
-                    is StateFlow.Success<*>-> initReadingNowShelf(it.data as JSONObject)
+                    is StateFlow.Success<*>-> viewModel.fillReadingNowShelf(it.data as JSONObject)
                     is StateFlow.Error->{errorMessage(it.errorMessage)}
                 }
             }
+            viewModel.wantToReadShelf.observe(this){
+                when(it){
+                    is StateFlow.Loading -> {loading(it.loading)}
+                    is StateFlow.Success<*>-> viewModel.fillWantToReadShelf(it.data as JSONObject)
+                    is StateFlow.Error->{errorMessage(it.errorMessage)}
+                }
+            }
+            viewModel.readShelf.observe(this){
+                when(it){
+                    is StateFlow.Loading -> {loading(it.loading)}
+                    is StateFlow.Success<*>-> viewModel.fillReadShelf(it.data as JSONObject)
+                    is StateFlow.Error->{errorMessage(it.errorMessage)}
+                }
+            }
+            viewModel.allShelvesResult.observe(this){
+                val totalItemsReadingNow = it.totalItemsReadingNow
+                val coverImageReadingNow = it.coverImageReadingNow
+
+                initShelvesValues(
+                    totalItemsReadingNow,
+                    coverImageReadingNow)
+            }
+        }
+
+
+    private fun initShelvesValues(totalItemsReadingNow: Int?,
+                                  coverImageReadingNow:String?) {
+        setContent {
+            val screenTitleMyBooks = getString(R.string.screen_title_my_books)
+            val titleReadingNow = getString(R.string.title_reading_now)
+            val titleRead = getString(R.string.title_read)
+            val titleWantToRead = getString(R.string.title_want_to_read)
+
+            MyBooksScreen(
+                defaultScreenContent = DefaulScreenContent(screenTitleMyBooks),
+                shelvesTitles = ShelvesTitles(
+                    titleReadingNow,
+                    titleRead,
+                    titleWantToRead
+                ), shelvesContent = ShelvesContent(
+                    totalItemsReadingNow,
+                    coverImageReadingNow),
+            )
         }
     }
-    private fun initValues(result: JSONObject) {
-        viewModel.getBookShelves(result)
-    }
-    private fun initReadingNowShelf(result: JSONObject) {
-        val resultTest = result
-    }
-
-
 
     private fun errorMessage(errorMessage: String) {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
@@ -174,9 +195,10 @@ fun MessageCard(msg:Messages){
 }
 
 @Composable
-fun MyBooksScreen(defaultScreenContent: DefaulScreenContent, myBooksContent: MyBooksContent){
+fun MyBooksScreen(defaultScreenContent: DefaulScreenContent,
+                  shelvesTitles: ShelvesTitles,
+                  shelvesContent: ShelvesContent){
     val contextForToast = LocalContext.current.applicationContext
-
 
     Column(
         modifier = Modifier
@@ -238,7 +260,7 @@ fun MyBooksScreen(defaultScreenContent: DefaulScreenContent, myBooksContent: MyB
         ){
             Column {
                 Text(
-                    text = myBooksContent.readingNowTitle,
+                    text = shelvesTitles.readingNowTitle,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp
@@ -248,19 +270,22 @@ fun MyBooksScreen(defaultScreenContent: DefaulScreenContent, myBooksContent: MyB
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ){
-                        ReadingNowList(myBooksContent.coverReadingNow)
+                        ReadingNowList(ShelvesContent(shelvesContent.totalItens, shelvesContent.coverImage))
                 }
             }
         }
     }
 }
 
-fun LazyListScope.ReadingNowList(cover:String) {
-    items (3){
+fun LazyListScope.ReadingNowList(shelvesContent: ShelvesContent) {
+    items (shelvesContent.totalItens!!){
        Box(modifier = Modifier
-           .fillMaxSize()
+           .padding(top = 16.dp)
+           .fillMaxWidth()
+           .background(Color.Blue)
        ){
-            //image
+           Text(text = shelvesContent.coverImage!!)
+           //Image(painter = , contentDescription = )
        }
     }
 }
@@ -268,8 +293,11 @@ fun LazyListScope.ReadingNowList(cover:String) {
 @Composable
 fun PreviewMyBooksScreen(){
     // MessageCard(msg = Messages("Leonardo","Body test"))
-    MyBooksScreen(defaultScreenContent = DefaulScreenContent("My Books P"),
-        myBooksContent =  MyBooksContent("Reading Now T","Read P", "Want To read P", "Cover test"))
+    MyBooksScreen(
+        defaultScreenContent = DefaulScreenContent("My Books P"),
+        shelvesTitles =  ShelvesTitles("Reading Now T","Read P", "Want To read P"),
+        shelvesContent = ShelvesContent(1, "Url Link")
+    )
 
 }
 

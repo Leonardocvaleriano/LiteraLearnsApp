@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.codeplace.literalearnsapp.R
 import com.codeplace.literalearnsapp.databinding.ActivityGooglesigninBinding
 import com.codeplace.literalearnsapp.ui.home.view.activity.HomeActivity
-import com.codeplace.literalearnsapp.ui.home.viewModel.AuthenticationViewModel
+import com.codeplace.literalearnsapp.ui.home.viewModel.LiteraLearnsViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -26,7 +26,7 @@ class GoogleSignInActivity : AppCompatActivity() {
 
 
 
-    private val viewModel by viewModel<AuthenticationViewModel>()
+    private val viewModel by viewModel<LiteraLearnsViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,8 +52,8 @@ class GoogleSignInActivity : AppCompatActivity() {
 
         // When your app starts, check if the user has already signed in to your app using Google,
         // on this device or another device, by calling silentSignIn:
-//        mGoogleSignInClient.silentSignIn()
-//            .addOnCompleteListener(this) { task -> handleSignInResult(task) }
+        mGoogleSignInClient.silentSignIn()
+            .addOnCompleteListener(this) { task -> handleSignInResult(task) }
 
         // This task is always completed immediately, there is no need to attach an
         // asynchronous listener.

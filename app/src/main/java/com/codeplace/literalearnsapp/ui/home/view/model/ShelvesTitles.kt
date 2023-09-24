@@ -1,8 +1,9 @@
 package com.codeplace.literalearnsapp.ui.home.view.model
 
-data class MyBooksContent(
+data class ShelvesTitles(
+    // Default Structure
     val readingNowTitle: String,
     val readTitle: String,
     val wantToReadTitle: String,
-    val coverReadingNow:String
+    // Api results
 )

@@ -12,6 +12,5 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.codeplace.literalearnsapp.ui.home.view.model.DefaulScreenContent
-import com.codeplace.literalearnsapp.ui.home.view.model.MyBooksContent
 
 
