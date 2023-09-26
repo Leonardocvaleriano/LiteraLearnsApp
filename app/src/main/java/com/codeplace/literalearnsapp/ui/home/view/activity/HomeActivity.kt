@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
@@ -45,6 +47,7 @@ import com.codeplace.literalearnsapp.stateFlow.StateFlow
 import com.codeplace.literalearnsapp.ui.home.view.model.DefaulScreenContent
 import com.codeplace.literalearnsapp.ui.home.view.model.ShelvesTitles
 import com.codeplace.literalearnsapp.ui.home.view.model.ShelvesContent
+import com.codeplace.literalearnsapp.ui.home.view.model.ShelvesResults
 import com.codeplace.literalearnsapp.ui.home.viewModel.LiteraLearnsViewModel
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -103,7 +106,7 @@ class HomeActivity : AppCompatActivity() {
             viewModel.readingNowShelf.observe(this){
                 when(it){
                     is StateFlow.Loading -> {loading(it.loading)}
-                    is StateFlow.Success<*>-> viewModel.fillReadingNowShelf(it.data as JSONObject)
+                    is StateFlow.Success<*>-> viewModel.fillReadingNowShelfList(it.data as JSONObject)
                     is StateFlow.Error->{errorMessage(it.errorMessage)}
                 }
             }
@@ -122,18 +125,22 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
             viewModel.allShelvesResult.observe(this){
-                val totalItemsReadingNow = it.totalItemsReadingNow
-                val coverImageReadingNow = it.coverImageReadingNow
+                 val coverBookReadingNowList = it.coverBookReadingNowList
+                 val coverBookWantToReadList = it.coverBookWantToReadList
+                 val coverBookReadList = it.coverBookReadList
 
                 initShelvesValues(
-                    totalItemsReadingNow,
-                    coverImageReadingNow)
+                    ShelvesResults(
+                        coverBookReadingNowList = coverBookReadingNowList,
+                        coverBookWantToReadList = coverBookWantToReadList,
+                        coverBookReadList = coverBookReadList
+                    )
+                )
             }
         }
 
 
-    private fun initShelvesValues(totalItemsReadingNow: Int?,
-                                  coverImageReadingNow:String?) {
+    private fun initShelvesValues(shelvesResults: ShelvesResults) {
         setContent {
             val screenTitleMyBooks = getString(R.string.screen_title_my_books)
             val titleReadingNow = getString(R.string.title_reading_now)
@@ -146,9 +153,11 @@ class HomeActivity : AppCompatActivity() {
                     titleReadingNow,
                     titleRead,
                     titleWantToRead
-                ), shelvesContent = ShelvesContent(
-                    totalItemsReadingNow,
-                    coverImageReadingNow),
+                ), shelvesResults = ShelvesResults(
+                    shelvesResults.coverBookReadingNowList,
+                    shelvesResults.coverBookWantToReadList,
+                    shelvesResults.coverBookReadList)
+
             )
         }
     }
@@ -197,7 +206,7 @@ fun MessageCard(msg:Messages){
 @Composable
 fun MyBooksScreen(defaultScreenContent: DefaulScreenContent,
                   shelvesTitles: ShelvesTitles,
-                  shelvesContent: ShelvesContent){
+                  shelvesResults: ShelvesResults){
     val contextForToast = LocalContext.current.applicationContext
 
     Column(
@@ -256,7 +265,7 @@ fun MyBooksScreen(defaultScreenContent: DefaulScreenContent,
         Row (
             modifier = Modifier
                 .padding(paddingValues = PaddingValues(16.dp))
-                .fillMaxWidth()
+                .fillMaxSize()
         ){
             Column {
                 Text(
@@ -265,39 +274,60 @@ fun MyBooksScreen(defaultScreenContent: DefaulScreenContent,
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp
                 )
+
                 LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier,
                     horizontalArrangement = Arrangement.SpaceBetween
-                ){
-                        ReadingNowList(ShelvesContent(shelvesContent.totalItens, shelvesContent.coverImage))
+                ) {
+                    ReadingNowList(
+                        shelvesResults.coverBookReadingNowList
+                        )
                 }
+
+            }
+        }
+    }
+}
+fun LazyListScope.ReadingNowList(items: List<ShelvesContent>?) {
+    items(items!!.size) { i ->
+        Box(
+            modifier = Modifier
+                .padding(10.dp)
+                .size(height = 130.dp, width = 110.dp)
+                .background(Color.Blue)
+        ) {
+            items.map {
+                //Image(painter = , contentDescription = )
+                it.coverBooksUrl
             }
         }
     }
 }
 
-fun LazyListScope.ReadingNowList(shelvesContent: ShelvesContent) {
-    items (shelvesContent.totalItens!!){
-       Box(modifier = Modifier
-           .padding(top = 16.dp)
-           .fillMaxWidth()
-           .background(Color.Blue)
-       ){
-           Text(text = shelvesContent.coverImage!!)
-           //Image(painter = , contentDescription = )
-       }
-    }
-}
+
+//fun LazyListScope.ReadingNowListTest1(shelvesContent: ShelvesContent) {
+//    items (shelvesContent.totalItems!!){index ->
+//       Box(modifier = Modifier
+//           .padding(10.dp)
+//           .size(height = 130.dp, width = 110.dp)
+//           .background(Color.Blue)
+//       ){
+//           shelvesContent.coverImage
+//           Text(text = "$index")
+//           //Image(painter = , contentDescription = )
+//       }
+//    }
+//}
+
 @Preview
 @Composable
-fun PreviewMyBooksScreen(){
+fun PreviewMyBooksScreen() {
     // MessageCard(msg = Messages("Leonardo","Body test"))
-    MyBooksScreen(
-        defaultScreenContent = DefaulScreenContent("My Books P"),
-        shelvesTitles =  ShelvesTitles("Reading Now T","Read P", "Want To read P"),
-        shelvesContent = ShelvesContent(1, "Url Link")
-    )
+//    MyBooksScreen(
+//        defaultScreenContent = DefaulScreenContent("My Books P"),
+//        shelvesTitles = ShelvesTitles("Reading Now T", "Read P", "Want To read P"),
+//        //shelvesContent = ShelvesContent(1, "Url Link")
+//    )
+    }
 
-}
 
