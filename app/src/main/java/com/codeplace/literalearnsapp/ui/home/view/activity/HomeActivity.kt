@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -32,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +45,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.codeplace.literalearnsapp.R
 import com.codeplace.literalearnsapp.databinding.ActivityHomeBinding
 import com.codeplace.literalearnsapp.stateFlow.StateFlow
@@ -57,6 +64,7 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityHomeBinding
     private val viewModel by viewModel<LiteraLearnsViewModel>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +97,7 @@ class HomeActivity : AppCompatActivity() {
 //            }
 //        }
 //
-  }
+    }
 
 
     private fun initValues(authCode:String?) {
@@ -103,41 +111,37 @@ class HomeActivity : AppCompatActivity() {
                 is StateFlow.Error -> { errorMessage(it.errorMessage)}
             }
         }
-            viewModel.readingNowShelf.observe(this){
-                when(it){
-                    is StateFlow.Loading -> {loading(it.loading)}
-                    is StateFlow.Success<*>-> viewModel.fillReadingNowShelfList(it.data as JSONObject)
-                    is StateFlow.Error->{errorMessage(it.errorMessage)}
-                }
-            }
-            viewModel.wantToReadShelf.observe(this){
-                when(it){
-                    is StateFlow.Loading -> {loading(it.loading)}
-                    is StateFlow.Success<*>-> viewModel.fillWantToReadShelf(it.data as JSONObject)
-                    is StateFlow.Error->{errorMessage(it.errorMessage)}
-                }
-            }
-            viewModel.readShelf.observe(this){
-                when(it){
-                    is StateFlow.Loading -> {loading(it.loading)}
-                    is StateFlow.Success<*>-> viewModel.fillReadShelf(it.data as JSONObject)
-                    is StateFlow.Error->{errorMessage(it.errorMessage)}
-                }
-            }
-            viewModel.allShelvesResult.observe(this){
-                 val coverBookReadingNowList = it.coverBookReadingNowList
-                 val coverBookWantToReadList = it.coverBookWantToReadList
-                 val coverBookReadList = it.coverBookReadList
-
-                initShelvesValues(
-                    ShelvesResults(
-                        coverBookReadingNowList = coverBookReadingNowList,
-                        coverBookWantToReadList = coverBookWantToReadList,
-                        coverBookReadList = coverBookReadList
-                    )
-                )
+        viewModel.readingNowShelf.observe(this){
+            when(it){
+                is StateFlow.Loading -> {loading(it.loading)}
+                is StateFlow.Success<*>-> viewModel.fillReadingNowShelfList(it.data as JSONObject)
+                is StateFlow.Error->{errorMessage(it.errorMessage)}
             }
         }
+        viewModel.wantToReadShelf.observe(this){
+            when(it){
+                is StateFlow.Loading -> {loading(it.loading)}
+                is StateFlow.Success<*>-> viewModel.fillWantToReadShelf(it.data as JSONObject)
+                is StateFlow.Error->{errorMessage(it.errorMessage)}
+            }
+        }
+        viewModel.readShelf.observe(this){
+            when(it){
+                is StateFlow.Loading -> {loading(it.loading)}
+                is StateFlow.Success<*>-> viewModel.fillReadShelf(it.data as JSONObject)
+                is StateFlow.Error->{errorMessage(it.errorMessage)}
+            }
+        }
+        viewModel.allShelvesResult.observe(this){
+            initShelvesValues(
+                ShelvesResults(
+                    coverBookReadingNowList = it.coverBookReadingNowList,
+                    coverBookWantToReadList = it.coverBookWantToReadList,
+                    coverBookReadList = it.coverBookReadList
+                )
+            )
+        }
+    }
 
 
     private fun initShelvesValues(shelvesResults: ShelvesResults) {
@@ -146,9 +150,10 @@ class HomeActivity : AppCompatActivity() {
             val titleReadingNow = getString(R.string.title_reading_now)
             val titleRead = getString(R.string.title_read)
             val titleWantToRead = getString(R.string.title_want_to_read)
+            val coverBookDescription = getString(R.string.cover_book_description)
 
             MyBooksScreen(
-                defaultScreenContent = DefaulScreenContent(screenTitleMyBooks),
+                defaultScreenContent = DefaulScreenContent(screenTitleMyBooks, coverBookDescription),
                 shelvesTitles = ShelvesTitles(
                     titleReadingNow,
                     titleRead,
@@ -173,36 +178,6 @@ class HomeActivity : AppCompatActivity() {
 
 }
 
-// LiteraLearns
-
-// Test
- data class Messages(val author:String, val body:String)
-
-@Composable
-fun MessageCard(msg:Messages){
-
-
-    Row(modifier = Modifier.padding(5.dp)) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
-            contentDescription =  "User photo",
-            modifier = Modifier
-                .size(40.dp)
-                .clip(shape = CircleShape)
-        )
-        Column(
-            modifier = Modifier.padding(horizontal = 5.dp)
-        ) {
-            Text(text = msg.author, style = TextStyle(color = Color.Blue))
-            Spacer(modifier = Modifier.size(5.dp))
-            Text(
-                text = msg.body,
-                style = TextStyle(color = Color.Blue),
-             )
-        }
-    }
-}
-
 @Composable
 fun MyBooksScreen(defaultScreenContent: DefaulScreenContent,
                   shelvesTitles: ShelvesTitles,
@@ -211,8 +186,9 @@ fun MyBooksScreen(defaultScreenContent: DefaulScreenContent,
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp)
+            .fillMaxSize()
+            .padding(PaddingValues(top = 16.dp, start = 6.dp
+            ))
     ) {
         Row(
             modifier = Modifier
@@ -246,88 +222,77 @@ fun MyBooksScreen(defaultScreenContent: DefaulScreenContent,
                         .size(28.dp)
                 )
             }
+
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp),
+                .padding(PaddingValues(top = 4.dp, bottom = 16.dp)),
             horizontalArrangement = Arrangement.Center
         ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(0.4f)
-                        .height(2.dp)
-                        .graphicsLayer(translationY = 2.dp.value / 2)
-                        .background(Color.LightGray)
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.4f)
+                    .height(2.dp)
+                    .graphicsLayer(translationY = 2.dp.value / 2)
+                    .background(Color.LightGray)
+            )
 
-            }
-        Row (
-            modifier = Modifier
-                .padding(paddingValues = PaddingValues(16.dp))
-                .fillMaxSize()
-        ){
-            Column {
-                Text(
-                    text = shelvesTitles.readingNowTitle,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp
-                )
-
-                LazyRow(
-                    modifier = Modifier,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    ReadingNowList(
-                        shelvesResults.coverBookReadingNowList
-                        )
-                }
-
-            }
         }
-    }
-}
-fun LazyListScope.ReadingNowList(items: List<ShelvesContent>?) {
-    items(items!!.size) { i ->
-        Box(
+        Column(
             modifier = Modifier
-                .padding(10.dp)
-                .size(height = 130.dp, width = 110.dp)
-                .background(Color.Blue)
-        ) {
-            items.map {
-                //Image(painter = , contentDescription = )
-                it.coverBooksUrl
+                .padding(paddingValues = PaddingValues(start = 16.dp)),
+        )
+        {
+            Text(
+                text = shelvesTitles.readingNowTitle,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
+            )
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                ShelvesList(shelvesResults.coverBookReadingNowList, defaultScreenContent)
+            }
+            Text(
+                text = shelvesTitles.wantToReadTitle,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
+            )
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                ShelvesList(shelvesResults.coverBookWantToReadList, defaultScreenContent)
             }
         }
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
+fun LazyListScope.ShelvesList(readingNowList: List<ShelvesContent>,
+                                 defaultScreenContent: DefaulScreenContent) {
+    items(readingNowList) { coverBookUrl ->
 
-//fun LazyListScope.ReadingNowListTest1(shelvesContent: ShelvesContent) {
-//    items (shelvesContent.totalItems!!){index ->
-//       Box(modifier = Modifier
-//           .padding(10.dp)
-//           .size(height = 130.dp, width = 110.dp)
-//           .background(Color.Blue)
-//       ){
-//           shelvesContent.coverImage
-//           Text(text = "$index")
-//           //Image(painter = , contentDescription = )
-//       }
-//    }
-//}
+        GlideImage(
+                model = coverBookUrl.coverBookUrl,
+                contentDescription = defaultScreenContent.coverBooksDescription,
+                modifier = Modifier
+                    .clickable(onClick = { })
+                    .size(height = 220.dp, width = 120.dp)
+            )
+    }
+}
 
 @Preview
 @Composable
 fun PreviewMyBooksScreen() {
     // MessageCard(msg = Messages("Leonardo","Body test"))
-//    MyBooksScreen(
-//        defaultScreenContent = DefaulScreenContent("My Books P"),
-//        shelvesTitles = ShelvesTitles("Reading Now T", "Read P", "Want To read P"),
-//        //shelvesContent = ShelvesContent(1, "Url Link")
-//    )
-    }
+    MyBooksScreen(
+        defaultScreenContent = DefaulScreenContent("My Books P", " COVER DESCRIPTION"),
+        shelvesTitles = ShelvesTitles("Reading Now T", "Read P", "Want To read P"),
+        shelvesResults = ShelvesResults())
+}
 
 

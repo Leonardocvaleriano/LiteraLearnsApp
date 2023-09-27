@@ -12,6 +12,13 @@ import org.json.JSONObject
 class LiteraLearnsViewModel(private val literaLearnsRepository: LiteraLearnsRepository): BaseViewModel() {
 
 
+    val API_KEY = BuildConfig.API_KEY
+
+    val volumeIdWantToRead = 2
+    val volumeIdReadingNow = 3
+    val volumeIdRead = 4
+
+
     val tokenAuthenticated = MutableLiveData<StateFlow>()
     val readingNowShelf = MutableLiveData<StateFlow>()
     val wantToReadShelf = MutableLiveData<StateFlow>()
@@ -21,13 +28,7 @@ class LiteraLearnsViewModel(private val literaLearnsRepository: LiteraLearnsRepo
     val coverBookWantToReadList = ArrayList<ShelvesContent>()
     val coverBookReadList = ArrayList<ShelvesContent>()
 
-
-
     // val allShelvesResults = mutableListOf<ShelvesResults>()
-
-
-    val API_KEY = BuildConfig.API_KEY
-    val volumeIdReadingNow = 3
 
     val allShelvesResult = MutableLiveData<ShelvesResults>()
 
@@ -43,46 +44,72 @@ class LiteraLearnsViewModel(private val literaLearnsRepository: LiteraLearnsRepo
     fun getBookShelves(result: JSONObject) {
         val accessToken = result.getString("access_token")
         val tokenType = result.getString("token_type")
+
         getReadingNowShelf(volumeIdReadingNow,API_KEY, "$tokenType $accessToken")
-        getWantToReadShelf()
-        getReadShelf()
+        getWantToReadShelf(volumeIdWantToRead, API_KEY, "$tokenType $accessToken")
+        getReadShelf(volumeIdRead,API_KEY, "$tokenType $accessToken")
     }
 
-    fun getReadingNowShelf(volumeId:Int,apiKey: String, accessToken:String)= fetchData(readingNowShelf){
+    fun getReadingNowShelf(volumeId:Int,apiKey: String, accessToken:String)=fetchData(readingNowShelf){
         literaLearnsRepository.getBookShelves(volumeId,apiKey, accessToken)
     }
-    fun getWantToReadShelf(){
-
+    fun getWantToReadShelf(volumeId: Int, apiKey: String, accessToken: String)=fetchData(wantToReadShelf) {
+        literaLearnsRepository.getBookShelves(volumeId,apiKey, accessToken)
     }
-    fun getReadShelf(){
-
+    fun getReadShelf(volumeId: Int, apiKey: String, accessToken: String)=fetchData(wantToReadShelf) {
+        literaLearnsRepository.getBookShelves(volumeId,apiKey, accessToken)
     }
 
     fun fillReadingNowShelfList(result: JSONObject) {
         val resultJSONArray = result.getJSONArray("items")
+        var indexJsonObject = 0
         (0 until resultJSONArray.length())
-            .map { resultJSONArray
-                .getJSONObject(0)
+            .map {
+                resultJSONArray
+                .getJSONObject(indexJsonObject++)
                 .getJSONObject("volumeInfo")
                 .getJSONObject("imageLinks")
-                .getString("smallThumbnail")
-            }
-            .forEach {
-                coverBookReadingNowList.add(ShelvesContent(it))
+                .getString("thumbnail")
+            }.forEach {
+                 coverBookReadingNowList.add(ShelvesContent(it))
             }
         allShelvesResult.postValue(ShelvesResults(coverBookReadingNowList = coverBookReadingNowList))
     }
 
-    fun fillWantToReadShelf(
-        result: JSONObject){
 
-       // allShelvesResult.postValue(ShelvesResults())
+    fun fillWantToReadShelf(result: JSONObject){
+        val getJSONObject = result.getJSONObject("items")
+        val resultJSONArray = result.getJSONArray("items")
+        var indexJsonObject = 0
+        (0 until resultJSONArray.length())
+            .map {
+                resultJSONArray
+                    .getJSONObject(indexJsonObject++)
+                    .getJSONObject("volumeInfo")
+                    .getJSONObject("imageLinks")
+                    .getString("thumbnail")
+            }.forEach {
+                coverBookWantToReadList.add(ShelvesContent(it))
+            }
+        allShelvesResult.postValue(ShelvesResults(coverBookWantToReadList = coverBookWantToReadList))
 
     }
     fun fillReadShelf(result: JSONObject){
 
-        //allShelvesResult.postValue(ShelvesResults(totalItemsWantToRead = totalItems))
-    }
+        val resultJSONArray = result.getJSONArray("items")
+        var indexJsonObject = 0
+        (0 until resultJSONArray.length())
+            .map {
+                resultJSONArray
+                    .getJSONObject(indexJsonObject++)
+                    .getJSONObject("volumeInfo")
+                    .getJSONObject("imageLinks")
+                    .getString("thumbnail")
+            }.forEach {
+                coverBookReadList.add(ShelvesContent(it))
+            }
+        allShelvesResult.postValue(ShelvesResults(coverBookReadList = coverBookReadList))
 
+    }
 
 }
