@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.home.view.activity.theme
+package com.codeplace.literalearnsapp.ui.login.view.activity.theme
 
 import android.app.Activity
 import android.os.Build

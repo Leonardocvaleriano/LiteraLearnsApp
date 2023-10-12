@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1038655475993",
+    "project_id": "literalearns-app",
+    "storage_bucket": "literalearns-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038655475993:android:fc68c0301b7e06d62cb588",
+        "android_client_info": {
+          "package_name": "com.codeplace.literalearnsapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH6De-cH6nR3bUO7lD-kMg7rCkZendUn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

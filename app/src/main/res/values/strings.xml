@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">LiteraLearns App</string>
-    <string name="server_client_id">392812652952-nvthbfvt51da6v49ucq8b19p31p7627d.apps.googleusercontent.com</string>
-    <string name="client_secret">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</string>
+    <string name="server_web_client_id">1038655475993-v0o24d750t69mcg2omjfva57c9tlhpno.apps.googleusercontent.com</string>
+    <string name="client_secret">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</string>
     <string name="grant_type">authorization_code</string>
-    <string name="scope">https://www.googleapis.com/auth/books</string>
+    <string name="books_scope">https://www.googleapis.com/auth/books</string>
+
 
     <string name="redirect_uri">""</string>
     <string name="title_activity_main">MainActivity</string>
@@ -11,9 +12,10 @@
     <string name="title_reading_now">Reading now</string>
     <string name="title_read">Read</string>
     <string name="title_want_to_read">Want to read</string>
-    <string name="cover_book_description">Want to read</string>
-
-
+    <string name="cover_book_description">Cover</string>
+    <string name="title_activity_server_auth_code">ServerAuthCodeActivity</string>
+    <string name="title_activity_introduction">IntroductionActivity</string>
+    <string name="title_activity_google_sign_in">GoogleSignInActivity</string>
 
 
 </resources>
