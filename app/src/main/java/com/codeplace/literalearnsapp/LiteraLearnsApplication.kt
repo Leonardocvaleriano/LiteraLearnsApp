@@ -1,6 +1,7 @@
 package com.codeplace.literalearnsapp
 
 import android.content.SharedPreferences
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import com.codeplace.literalearnsapp.di.appModule
 import org.koin.android.ext.koin.androidContext

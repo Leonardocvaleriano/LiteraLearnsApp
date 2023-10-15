@@ -20,7 +20,7 @@
             android:label="@string/title_activity_google_sign_in"
             android:theme="@style/Theme.LiteraLearnsApp" />
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.main.view.activity.MainActivity"
             android:exported="true"
             android:label="@string/title_activity_introduction"
             android:theme="@style/Theme.LiteraLearnsApp">

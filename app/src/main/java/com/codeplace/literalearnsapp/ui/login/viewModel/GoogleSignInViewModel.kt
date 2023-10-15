@@ -27,4 +27,5 @@ class GoogleSignInViewModel: ViewModel() {
             isSignInSuccessful = false
         ) }
     }
+
 }
