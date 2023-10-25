@@ -1,7 +1,5 @@
-package com.codeplace.literalearnsapp.ui.introduction.view.activity.screens
+package com.codeplace.literalearnsapp.ui.welcome.screens
 
-import android.content.Intent
-import android.service.autofill.OnClickAction
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -24,17 +21,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 
 import androidx.compose.ui.unit.dp
 import com.codeplace.literalearnsapp.state.SignInState
-import com.codeplace.literalearnsapp.ui.login.view.activity.screens.GoogleSignInScreen
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun IntroductionScreens(state:SignInState,
-                        onSignInClick:() -> Unit
+fun WelcomeScreen(
+    state: SignInState,
+    onSignInClick: () -> Unit
 ) {
 
     val pageCount = 3
@@ -43,15 +39,18 @@ fun IntroductionScreens(state:SignInState,
     HorizontalPager(state = pagerState) { page ->
         val color = if (isSystemInDarkTheme()) Color.Blue else Color.White
         //Text(text = "Page: $page")
-      Column(modifier = Modifier.fillMaxSize()
-          .background(color = color)
-          .padding(top= 400.dp)) {
-          when (page) {
-              0 -> FirstPagerScreen()
-              1 -> SecondPagerScreen()
-              2 -> GoogleSignInScreen(state, onSignInClick)
-          }
-      }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = color)
+                .padding(top = 400.dp)
+        ) {
+            when (page) {
+                0 -> FirstPagerScreen()
+                1 -> SecondPagerScreen()
+                2 -> GoogleSignInScreen(state, onSignInClick)
+            }
+        }
     }
 
 

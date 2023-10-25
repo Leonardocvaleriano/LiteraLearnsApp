@@ -1,31 +1,70 @@
 package com.codeplace.literalearnsapp.ui.login.viewModel
 
 
+import android.content.Context
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.codeplace.literalearnsapp.remote.GoogleAuthUiClient
 import com.codeplace.literalearnsapp.state.SignInState
 import com.codeplace.literalearnsapp.ui.login.view.model.SignInResult
+import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 
-class GoogleSignInViewModel: ViewModel() {
+class GoogleSignInViewModel(
+    private val googleAuthUiClient: GoogleAuthUiClient
+) : ViewModel() {
 
     private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
 
-    fun onSignInResult(result: SignInResult){
-        _state.update { it.copy(
-            isSignInSuccessful = result.data != null,
-            signInError = result.errorMessage
-        )}
+
+    fun getSignInIntentSender(launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>) {
+        viewModelScope.launch {
+            val signInIntentSender = googleAuthUiClient.signIn()
+            launcher.launch(
+                IntentSenderRequest.Builder(
+                    signInIntentSender ?: return@launch
+                ).build()
+            )
+        }
+    }
+
+    fun getLauncherForActivityResult(result: ActivityResult) {
+        viewModelScope.launch {
+            val signInResult = googleAuthUiClient.signInWithIntent(
+                intent = result.data ?: return@launch
+            )
+            onSignInResult(signInResult)
+        }
+    }
+
+    fun onSignInResult(result: SignInResult) {
+        _state.update {
+            it.copy(
+                isSignInSuccessful = result.data != null,
+                signInError = result.errorMessage
+            )
+        }
 
     }
 
     fun resetState() {
-        _state.update { it.copy(
-            isSignInSuccessful = false
-        ) }
+        _state.update {
+            it.copy(
+                isSignInSuccessful = false
+            )
+        }
     }
+
 
 }
