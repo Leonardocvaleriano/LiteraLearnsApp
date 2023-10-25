@@ -69,6 +69,11 @@ fun MainNavScreen(
         viewModel.getSignedInUser()
     }
 
+    var loginNameAndTitle = if (userState.userId != null ) {
+        "LOGOUT"
+    } else {
+        "LOGIN"
+    }
     // Items inside the drawer as list.
     val items = listOf(
         MenuItem(
@@ -89,8 +94,8 @@ fun MainNavScreen(
             unselectedIcon = Icons.Outlined.Info
         ),
         MenuItem(
-            id = "login",
-            title = "login",
+            id = loginNameAndTitle,
+            title = loginNameAndTitle ,
             description = "Login in to share your books across devices",
             contentDescription = "sign in with google",
             textStyle = TextStyle(fontSize = 14.sp),
@@ -105,6 +110,7 @@ fun MainNavScreen(
             ModalDrawerSheet {
                 // Drawer Header
                 if (userState.userId !=null ) {
+
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -126,11 +132,9 @@ fun MainNavScreen(
                                 modifier = Modifier.padding(start = 20.dp, top = 6.dp),
                                 text = "${userState.userEmail}", fontSize = 18.sp
                             )
-
                         }
 
                     }
-
                 } else {
                     Box(
                         modifier = Modifier
@@ -138,7 +142,9 @@ fun MainNavScreen(
                             .padding(vertical = 64.dp), contentAlignment = Alignment.Center
                     ) {
                         Text(text = "LiteraLearns", fontSize = 58.sp)
+
                     }
+
                 }
                 // Drawer Body
                 var selectedItemIndex by rememberSaveable {
@@ -154,8 +160,8 @@ fun MainNavScreen(
                             when (item.id) {
                                 "share" -> {}
                                 "about" -> {}
-                                "login" -> {}
-                                "logout" -> {}
+                                "LOGIN" -> {}
+                                "LOGOUT" -> {}
                             }
                         },
                         icon = {
