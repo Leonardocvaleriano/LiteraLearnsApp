@@ -2,6 +2,7 @@ package com.codeplace.literalearnsapp.ui.login.viewModel
 
 
 import android.content.Context
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -13,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import com.codeplace.literalearnsapp.remote.GoogleAuthUiClient
 import com.codeplace.literalearnsapp.state.SignInState
 import com.codeplace.literalearnsapp.ui.login.view.model.SignInResult
+import com.codeplace.literalearnsapp.ui.login.view.model.UserData
 import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,6 +28,9 @@ class GoogleSignInViewModel(
 
     private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
+
+    private val _UserDataState = MutableStateFlow(UserData())
+    val userState = _UserDataState.asStateFlow()
 
 
     fun getSignInIntentSender(launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>) {
@@ -62,6 +67,17 @@ class GoogleSignInViewModel(
         _state.update {
             it.copy(
                 isSignInSuccessful = false
+            )
+        }
+    }
+
+    fun getSignedInUser() {
+        val userData = googleAuthUiClient.getSignedInUser()
+        _UserDataState.update {
+            it.copy(
+                userName = userData?.userName,
+                userEmail = userData?.userEmail,
+                userId = userData?.userId,
             )
         }
     }

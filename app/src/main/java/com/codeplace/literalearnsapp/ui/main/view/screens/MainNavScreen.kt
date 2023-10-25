@@ -28,6 +28,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -45,19 +47,27 @@ import androidx.navigation.compose.rememberNavController
 import com.codeplace.literalearnsapp.R
 import com.codeplace.literalearnsapp.state.SignInState
 import com.codeplace.literalearnsapp.ui.graphs.BooksNavGraph
+import com.codeplace.literalearnsapp.ui.login.viewModel.GoogleSignInViewModel
 import com.codeplace.literalearnsapp.ui.main.view.models.MenuItem
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainNavScreen(
-    navController: NavController = rememberNavController(),
-    state: SignInState
+    navController: NavController = rememberNavController()
 ) {
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    val viewModel:GoogleSignInViewModel = koinViewModel()
+    val userState by viewModel.userState.collectAsState()
+
+    LaunchedEffect(key1 = Unit  ){
+        viewModel.getSignedInUser()
+    }
 
     // Items inside the drawer as list.
     val items = listOf(
@@ -80,7 +90,7 @@ fun MainNavScreen(
         ),
         MenuItem(
             id = "login",
-            title = "Login with Google",
+            title = "login",
             description = "Login in to share your books across devices",
             contentDescription = "sign in with google",
             textStyle = TextStyle(fontSize = 14.sp),
@@ -94,7 +104,7 @@ fun MainNavScreen(
             // Drawer contents
             ModalDrawerSheet {
                 // Drawer Header
-                if (state.isSignInSuccessful) {
+                if (userState.userId !=null ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -110,11 +120,11 @@ fun MainNavScreen(
                             Text(
                                 modifier = Modifier
                                     .padding(top = 18.dp, start = 20.dp),
-                                text = "Test Test", fontSize = 26.sp
+                                text = "${userState.userName}", fontSize = 26.sp
                             )
                             Text(
                                 modifier = Modifier.padding(start = 20.dp, top = 6.dp),
-                                text = "Teste@teste.com.br", fontSize = 18.sp
+                                text = "${userState.userEmail}", fontSize = 18.sp
                             )
 
                         }
@@ -145,6 +155,7 @@ fun MainNavScreen(
                                 "share" -> {}
                                 "about" -> {}
                                 "login" -> {}
+                                "logout" -> {}
                             }
                         },
                         icon = {
@@ -189,7 +200,6 @@ fun MainNavScreen(
                     }
                 )
             }
-g
         ) { paddingValues ->
             BooksNavGraph(navController = navController, paddingValues)
         }

@@ -63,10 +63,7 @@ fun RootNavGraph(
         }
 
         composable("navStructureScreen"){
-
-            val viewModel: GoogleSignInViewModel = koinViewModel()
-            val state by viewModel.state.collectAsStateWithLifecycle()
-            MainNavScreen(state = state)
+            MainNavScreen()
         }
     }
 
