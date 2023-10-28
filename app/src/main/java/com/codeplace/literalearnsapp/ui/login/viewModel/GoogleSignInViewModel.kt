@@ -29,8 +29,8 @@ class GoogleSignInViewModel(
     private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
 
-    private val _UserDataState = MutableStateFlow(SignInResult())
-    val userState = _UserDataState.asStateFlow()
+    private val _userDataState = MutableStateFlow(SignInResult())
+    val userState = _userDataState.asStateFlow()
 
 
     fun getSignInIntentSender(launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>) {
@@ -60,6 +60,11 @@ class GoogleSignInViewModel(
                 signInError = result.errorMessage
             )
         }
+        _userDataState.update {
+            it.copy(
+                data = result.data
+            )
+        }
 
     }
 
@@ -73,11 +78,10 @@ class GoogleSignInViewModel(
 
     fun getSignedInUser() {
         val userData = googleAuthUiClient.getSignedInUser()
-        _UserDataState.update {
+        _userDataState.update {
             it.copy(
                 data = userData
             )
-
         }
     }
 
@@ -88,7 +92,7 @@ class GoogleSignInViewModel(
     }
 
     fun resetUserDataState(){
-            _UserDataState.update {
+        _userDataState.update {
                 it.copy(
                     data = null
                 )

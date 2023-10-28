@@ -1,3 +1,6 @@
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,10 +38,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ComponentActivity
 import androidx.navigation.NavController
 import com.codeplace.literalearnsapp.R
 import com.codeplace.literalearnsapp.ui.graphs.BooksNavGraph
@@ -49,6 +55,8 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarWithDrawer(navController: NavController) {
+
+    val appcontext = LocalContext.current
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -59,10 +67,23 @@ fun TopAppBarWithDrawer(navController: NavController) {
     val userState by viewModel.userState.collectAsState()
 
 
+    val state by viewModel.state.collectAsState()
+
     if (userState.data != null) {
         loginId = "logout"
         loginTitle = "Logout"
     }
+
+
+    val launcher = rememberLauncherForActivityResult(
+        contract =  ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = {
+            result ->
+            if (result.resultCode == ComponentActivity.RESULT_OK){
+                viewModel.getLauncherForActivityResult(result)
+            }
+        }
+    )
 
     // Items inside the drawer as list.
     val items = listOf(
@@ -99,6 +120,7 @@ fun TopAppBarWithDrawer(navController: NavController) {
         drawerContent = {
             // Drawer contents
             ModalDrawerSheet {
+
                 // Drawer Header
                 if (userState.data != null) {
 
@@ -123,6 +145,7 @@ fun TopAppBarWithDrawer(navController: NavController) {
                                 modifier = Modifier.padding(start = 20.dp, top = 6.dp),
                                 text = "${userState.data!!.userEmail}", fontSize = 18.sp
                             )
+
                         }
 
                     }
@@ -152,12 +175,11 @@ fun TopAppBarWithDrawer(navController: NavController) {
                                 "share" -> {}
                                 "about" -> {}
                                 "login" -> {
-
+                                    viewModel.getSignInIntentSender(launcher)
                                 }
                                 "logout" -> {
                                     viewModel.singOut()
                                     viewModel.resetUserDataState()
-
                                 }
                             }
                         },

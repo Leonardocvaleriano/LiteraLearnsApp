@@ -23,14 +23,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.codeplace.literalearnsapp.state.SignInState
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WelcomeScreen(
-    state: SignInState,
-    onSignInClick: () -> Unit
+    navController:NavController
 ) {
 
     val pageCount = 3
@@ -48,7 +48,7 @@ fun WelcomeScreen(
             when (page) {
                 0 -> FirstPagerScreen()
                 1 -> SecondPagerScreen()
-                2 -> GoogleSignInScreen(state, onSignInClick)
+                2 -> GoogleSignInScreen(navController = navController)
             }
         }
     }

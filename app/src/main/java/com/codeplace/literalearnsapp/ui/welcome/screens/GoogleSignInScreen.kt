@@ -1,6 +1,9 @@
 package com.codeplace.literalearnsapp.ui.welcome.screens
 
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -8,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontStyle
@@ -15,19 +19,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.codeplace.literalearnsapp.state.SignInState
+import com.codeplace.literalearnsapp.ui.login.viewModel.GoogleSignInViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun GoogleSignInScreen(state:SignInState,
-                       onSignInClick:() -> Unit
-){
-    val context = LocalContext.current
+fun GoogleSignInScreen(navController:NavController){
+
+    val applicationContext = LocalContext.current
+    val viewModel: GoogleSignInViewModel = koinViewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = { result ->
+            if (result.resultCode == ComponentActivity.RESULT_OK) {
+                viewModel.getLauncherForActivityResult(result)
+            }
+        }
+    )
+
+    LaunchedEffect(key1 = state.isSignInSuccessful) {
+        if (state.isSignInSuccessful) {
+                    Toast.makeText(
+                        applicationContext,
+                        "Sign in successful",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+            navController.popBackStack()
+            navController.navigate("home")
+            viewModel.resetState()
+        }
+    }
+
 
     LaunchedEffect(key1 = state.signInError){
         state.signInError?.let {
             error ->
             Toast.makeText(
-                context,
+                applicationContext,
                 error,
                 Toast.LENGTH_LONG
             ).show()
@@ -51,7 +84,9 @@ fun GoogleSignInScreen(state:SignInState,
         )
         Button( modifier=Modifier
             .padding(PaddingValues(top = 50.dp))
-            , onClick = onSignInClick) {
+            , onClick = {
+                viewModel.getSignInIntentSender(launcher = launcher)
+            }) {
             Text(text = "Sign in", textAlign = TextAlign.Center)
         }
     }

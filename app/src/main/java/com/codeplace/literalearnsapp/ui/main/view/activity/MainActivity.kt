@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.codeplace.literalearnsapp.ui.graphs.RootNavGraph
+import com.codeplace.literalearnsapp.ui.home.viewmodel.Screen.HomeScreen
 import com.codeplace.literalearnsapp.ui.login.view.activity.theme.LiteraLearnsAppTheme
+import com.codeplace.literalearnsapp.ui.welcome.screens.WelcomeScreen
+
 
 class MainActivity : ComponentActivity() {
 
@@ -35,16 +37,31 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val navController = rememberNavController()
-
-                    RootNavGraph(
+                    NavHost(
                         navController = navController,
-                        currentlyStartDestination = currentlyStartDestination)
+                        startDestination = currentlyStartDestination,
+                        route = Graph.ROOT
+                    ) {
+                        composable(route = "welcome") {
+                            WelcomeScreen(navController = navController)
+                        }
 
+                        composable("home"){
+                            HomeScreen(navController = navController)
+                        }
+
+                    }
                 }
+
             }
         }
     }
+
+    object Graph {
+        const val ROOT = "root"
+    }
 }
+
 
 
 
