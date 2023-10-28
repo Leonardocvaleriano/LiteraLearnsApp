@@ -29,7 +29,7 @@ class GoogleSignInViewModel(
     private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
 
-    private val _UserDataState = MutableStateFlow(UserData())
+    private val _UserDataState = MutableStateFlow(SignInResult())
     val userState = _UserDataState.asStateFlow()
 
 
@@ -75,12 +75,20 @@ class GoogleSignInViewModel(
         val userData = googleAuthUiClient.getSignedInUser()
         _UserDataState.update {
             it.copy(
-                userName = userData?.userName,
-                userEmail = userData?.userEmail,
-                userId = userData?.userId,
+                data = userData
             )
+
         }
     }
 
+    fun singOut() {
+        viewModelScope.launch {
+            googleAuthUiClient.signOut()
+        }
+    }
 
-}
+    fun resetUserDataState(){
+
+
+        }
+    }
