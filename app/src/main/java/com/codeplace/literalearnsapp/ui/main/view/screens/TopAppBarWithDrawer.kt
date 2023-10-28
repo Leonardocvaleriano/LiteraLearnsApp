@@ -151,8 +151,8 @@ fun TopAppBarWithDrawer(navController: NavController) {
                             when (item.id) {
                                 "share" -> {}
                                 "about" -> {}
-                                "Login" -> {}
-                                "Logout" -> {}
+                                "login" -> {}
+                                "logout" -> {}
                             }
                         },
                         icon = {
