@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.codeplace.literalearnsapp.ui.login.viewModel.GoogleSignInViewModel
-import com.codeplace.literalearnsapp.ui.main.view.screens.MainNavScreen
+import com.codeplace.literalearnsapp.ui.main.view.screens.SearchBookScreen
 import com.codeplace.literalearnsapp.ui.welcome.screens.WelcomeScreen
 import org.koin.androidx.compose.koinViewModel
 
@@ -49,7 +49,7 @@ fun RootNavGraph(
 //                    ).show()
 
                     navController.popBackStack()
-                    navController.navigate("navStructureScreen")
+                    navController.navigate("SearchBook")
                     viewModel.resetState()
                 }
             }
@@ -62,8 +62,8 @@ fun RootNavGraph(
             )
         }
 
-        composable("navStructureScreen"){
-            MainNavScreen()
+        composable("SearchBook"){
+            SearchBookScreen()
         }
     }
 

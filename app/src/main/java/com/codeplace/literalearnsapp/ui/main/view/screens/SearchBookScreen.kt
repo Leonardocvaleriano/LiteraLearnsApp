@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,7 +44,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.codeplace.literalearnsapp.R
-import com.codeplace.literalearnsapp.state.SignInState
 import com.codeplace.literalearnsapp.ui.graphs.BooksNavGraph
 import com.codeplace.literalearnsapp.ui.login.viewModel.GoogleSignInViewModel
 import com.codeplace.literalearnsapp.ui.main.view.models.MenuItem
@@ -55,25 +53,28 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainNavScreen(
+fun SearchBookScreen(
     navController: NavController = rememberNavController()
 ) {
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    var loginId = "login"
+    var loginTitle = "Login"
+
     val viewModel:GoogleSignInViewModel = koinViewModel()
     val userState by viewModel.userState.collectAsState()
 
-    LaunchedEffect(key1 = Unit  ){
-        viewModel.getSignedInUser()
+    viewModel.getSignedInUser()
+
+
+
+    if (userState.userId != null){
+        loginId = "logout"
+        loginTitle = "Logout"
     }
 
-    var loginNameAndTitle = if (userState.userId != null ) {
-        "LOGOUT"
-    } else {
-        "LOGIN"
-    }
     // Items inside the drawer as list.
     val items = listOf(
         MenuItem(
@@ -94,14 +95,15 @@ fun MainNavScreen(
             unselectedIcon = Icons.Outlined.Info
         ),
         MenuItem(
-            id = loginNameAndTitle,
-            title = loginNameAndTitle ,
+            id = loginId,
+            title = loginTitle,
             description = "Login in to share your books across devices",
             contentDescription = "sign in with google",
             textStyle = TextStyle(fontSize = 14.sp),
             selectedIcon = Icons.Default.ExitToApp,
             unselectedIcon = Icons.Outlined.ExitToApp
         )
+
     )
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -160,8 +162,8 @@ fun MainNavScreen(
                             when (item.id) {
                                 "share" -> {}
                                 "about" -> {}
-                                "LOGIN" -> {}
-                                "LOGOUT" -> {}
+                                "Login" -> {}
+                                "Logout" -> {}
                             }
                         },
                         icon = {
@@ -212,6 +214,4 @@ fun MainNavScreen(
     }
 
 }
-
-
 
