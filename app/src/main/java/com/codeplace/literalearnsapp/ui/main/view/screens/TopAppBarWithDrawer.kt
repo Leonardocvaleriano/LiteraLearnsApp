@@ -151,8 +151,14 @@ fun TopAppBarWithDrawer(navController: NavController) {
                             when (item.id) {
                                 "share" -> {}
                                 "about" -> {}
-                                "login" -> {}
-                                "logout" -> {}
+                                "login" -> {
+
+                                }
+                                "logout" -> {
+                                    viewModel.singOut()
+                                    viewModel.resetUserDataState()
+
+                                }
                             }
                         },
                         icon = {

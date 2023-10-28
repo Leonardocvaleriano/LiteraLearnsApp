@@ -88,7 +88,11 @@ class GoogleSignInViewModel(
     }
 
     fun resetUserDataState(){
-
+            _UserDataState.update {
+                it.copy(
+                    data = null
+                )
+            }
 
         }
     }
