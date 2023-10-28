@@ -57,20 +57,23 @@ fun SearchBookScreen(
     navController: NavController = rememberNavController()
 ) {
 
+    Drawer(navController)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Drawer(navController: NavController) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     var loginId = "login"
     var loginTitle = "Login"
 
-    val viewModel:GoogleSignInViewModel = koinViewModel()
+    val viewModel: GoogleSignInViewModel = koinViewModel()
     val userState by viewModel.userState.collectAsState()
 
-    viewModel.getSignedInUser()
 
-
-
-    if (userState.userId != null){
+    if (userState.userId != null) {
         loginId = "logout"
         loginTitle = "Logout"
     }
@@ -111,7 +114,7 @@ fun SearchBookScreen(
             // Drawer contents
             ModalDrawerSheet {
                 // Drawer Header
-                if (userState.userId !=null ) {
+                if (userState.userId != null) {
 
                     Box(
                         modifier = Modifier
@@ -194,11 +197,13 @@ fun SearchBookScreen(
                     navigationIcon = {
                         IconButton(
                             onClick = {
+                                viewModel.getSignedInUser()
                                 scope.launch {
                                     drawerState.apply {
                                         if (isClosed) open() else close()
                                     }
                                 }
+
                             }) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
@@ -212,6 +217,5 @@ fun SearchBookScreen(
             BooksNavGraph(navController = navController, paddingValues)
         }
     }
-
 }
 
