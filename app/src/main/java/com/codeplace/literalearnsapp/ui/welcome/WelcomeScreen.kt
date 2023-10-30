@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.welcome.screens
+package com.codeplace.literalearnsapp.ui.welcome
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.codeplace.literalearnsapp.state.SignInState
 
 
 @OptIn(ExperimentalFoundationApi::class)

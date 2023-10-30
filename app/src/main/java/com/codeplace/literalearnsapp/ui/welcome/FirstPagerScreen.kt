@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.welcome.screens
+package com.codeplace.literalearnsapp.ui.welcome
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme

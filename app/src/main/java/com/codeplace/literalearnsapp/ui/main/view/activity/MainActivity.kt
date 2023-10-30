@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.codeplace.literalearnsapp.ui.home.viewmodel.Screen.HomeScreen
+import com.codeplace.literalearnsapp.ui.graphs.base.BaseBooksGraph
 import com.codeplace.literalearnsapp.ui.login.view.activity.theme.LiteraLearnsAppTheme
-import com.codeplace.literalearnsapp.ui.welcome.screens.WelcomeScreen
+import com.codeplace.literalearnsapp.ui.welcome.WelcomeScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -46,8 +46,8 @@ class MainActivity : ComponentActivity() {
                             WelcomeScreen(navController = navController)
                         }
 
-                        composable("home"){
-                            HomeScreen(navController = navController)
+                        composable("books_graph"){
+                            BaseBooksGraph()
                         }
 
                     }
@@ -59,6 +59,7 @@ class MainActivity : ComponentActivity() {
 
     object Graph {
         const val ROOT = "root"
+        const val BOTTOM_NAV = "bottom_nav"
     }
 }
 

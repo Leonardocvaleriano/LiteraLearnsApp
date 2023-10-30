@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.welcome.screens
+package com.codeplace.literalearnsapp.ui.welcome
 
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.codeplace.literalearnsapp.state.SignInState
 import com.codeplace.literalearnsapp.ui.login.viewModel.GoogleSignInViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -50,7 +49,7 @@ fun GoogleSignInScreen(navController:NavController){
                     ).show()
 
             navController.popBackStack()
-            navController.navigate("home")
+            navController.navigate("books_graph")
             viewModel.resetState()
         }
     }

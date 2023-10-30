@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.learns.screen
+package com.codeplace.literalearnsapp.ui.mybooks.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun LearnsScreen(paddingValues: PaddingValues){
+fun MyBooksScreen(paddingValues:PaddingValues){
     Column(
         Modifier
         .fillMaxSize()
@@ -19,6 +19,7 @@ fun LearnsScreen(paddingValues: PaddingValues){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
 
-        Text(text = "Learns Screen")
+        Text(text = "My books Screen")
     }
+
 }
