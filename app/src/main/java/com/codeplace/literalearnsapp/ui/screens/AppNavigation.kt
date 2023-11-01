@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,6 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -72,7 +76,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
     val scope = rememberCoroutineScope()
 
     var loginId = "login"
-    var loginTitle = "Login"
+    var loginTitle = "Login with Google"
 
     val viewModel: GoogleSignInViewModel = koinViewModel()
     val userState by viewModel.userState.collectAsState()
@@ -157,39 +161,44 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
 
                 // Drawer Header
                 if (userState.data != null) {
-
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {
-                        Column(modifier = Modifier.padding(all = 24.dp)) {
+                        Column {
                             Image(
                                 painter = painterResource(id = R.drawable.ic_launcher_background),
                                 contentDescription = "User image",
                                 modifier = Modifier
+                                    .padding(top = 22.dp, start = 32.dp)
                                     .size(150.dp)
                                     .clip(shape = CircleShape)
                             )
                             Text(
                                 modifier = Modifier
-                                    .padding(top = 18.dp, start = 20.dp),
+                                    .padding(top = 18.dp, start = 32.dp),
                                 text = "${userState.data!!.userName}", fontSize = 26.sp
                             )
                             Text(
-                                modifier = Modifier.padding(start = 20.dp, top = 6.dp),
-                                text = "${userState.data!!.userEmail}", fontSize = 18.sp
+                                modifier = Modifier.padding(start = 32.dp),
+                                text = "${userState.data!!.userEmail}", fontSize = 14.sp
                             )
+
+                                Divider(modifier = Modifier.padding(top = 40.dp))
+                                Spacer(modifier = Modifier.size(60.dp))
 
                         }
 
                     }
                 } else {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 64.dp), contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "LiteraLearns", fontSize = 58.sp)
+                    Box{
+                        Column {
+                            Text(modifier = Modifier
+                                .padding(top = 40.dp, start = 32.dp, end = 32.dp),
+                                text = "LiteraLearns", fontSize = 48.sp)
+                            Divider(modifier = Modifier.padding(top = 40.dp))
+                            Spacer(modifier = Modifier.size(80.dp))
+                        }
 
                     }
 
@@ -225,7 +234,6 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                                     item.selectedIcon
                                 } else {
                                     item.unselectedIcon
-
                                 },
                                 contentDescription = item.contentDescription
                             )
@@ -308,5 +316,4 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
         }
     }
 }
-
 

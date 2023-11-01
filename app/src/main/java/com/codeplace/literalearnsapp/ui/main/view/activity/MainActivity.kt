@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.codeplace.literalearnsapp.navigation.graphs.RootNavGraph
-import com.codeplace.literalearnsapp.ui.login.view.activity.theme.LiteraLearnsAppTheme
+import com.codeplace.literalearnsapp.ui.theme.LiteraLearnsAppTheme
 
 
 class MainActivity : ComponentActivity() {
