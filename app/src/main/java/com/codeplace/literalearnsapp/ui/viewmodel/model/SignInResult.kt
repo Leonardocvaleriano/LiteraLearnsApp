@@ -1,8 +1,8 @@
-package com.codeplace.literalearnsapp.ui.login.view.model
+package com.codeplace.literalearnsapp.ui.viewmodel.model
 
 
 data class SignInResult(
-    val data:UserData? = null,
+    val data: UserData? = null,
     val errorMessage:String? = null
 )
 data class UserData(

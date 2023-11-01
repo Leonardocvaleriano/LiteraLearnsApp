@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.login.viewModel
+package com.codeplace.literalearnsapp.ui.viewmodel
 
 
 import android.content.Context
@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codeplace.literalearnsapp.remote.GoogleAuthUiClient
 import com.codeplace.literalearnsapp.state.SignInState
-import com.codeplace.literalearnsapp.ui.login.view.model.SignInResult
-import com.codeplace.literalearnsapp.ui.login.view.model.UserData
+import com.codeplace.literalearnsapp.ui.viewmodel.model.SignInResult
+import com.codeplace.literalearnsapp.ui.viewmodel.model.UserData
 import com.google.android.gms.auth.api.identity.Identity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

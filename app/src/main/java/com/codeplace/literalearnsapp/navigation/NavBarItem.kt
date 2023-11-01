@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.main.view.models
+package com.codeplace.literalearnsapp.navigation
 
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector

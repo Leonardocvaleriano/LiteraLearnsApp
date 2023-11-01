@@ -21,11 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.codeplace.literalearnsapp.navigation.Screen
 import com.codeplace.literalearnsapp.navigation.graphs.Graph
-import com.codeplace.literalearnsapp.ui.login.viewModel.GoogleSignInViewModel
-import com.codeplace.literalearnsapp.ui.main.view.activity.MainActivity
-import com.codeplace.literalearnsapp.ui.main.view.activity.MainActivity.*
+import com.codeplace.literalearnsapp.ui.viewmodel.GoogleSignInViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

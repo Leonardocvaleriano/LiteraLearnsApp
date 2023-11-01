@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.main.view.models
+package com.codeplace.literalearnsapp.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
