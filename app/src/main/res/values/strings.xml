@@ -16,6 +16,9 @@
     <string name="title_activity_server_auth_code">ServerAuthCodeActivity</string>
     <string name="title_activity_introduction">IntroductionActivity</string>
     <string name="title_activity_google_sign_in">GoogleSignInActivity</string>
+    <string name="learns">learns</string>
+    <string name="my_books">my_books</string>
+    <string name="search_books">search_books\n</string>
 
 
 </resources>

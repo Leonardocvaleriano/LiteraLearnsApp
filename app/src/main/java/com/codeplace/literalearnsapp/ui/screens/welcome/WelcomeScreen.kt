@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.welcome
+package com.codeplace.literalearnsapp.ui.screens.welcome
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
