@@ -186,8 +186,8 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                                 text = "${userDataState.data!!.userEmail}", fontSize = 14.sp
                             )
 
-                                Divider(modifier = Modifier.padding(top = 40.dp))
-                                Spacer(modifier = Modifier.size(60.dp))
+                                Divider(modifier = Modifier.padding(top = 60.dp, bottom = 60.dp))
+
 
                         }
 
@@ -198,8 +198,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                             Text(modifier = Modifier
                                 .padding(top = 40.dp, start = 32.dp, end = 32.dp),
                                 text = "LiteraLearns", fontSize = 48.sp)
-                            Divider(modifier = Modifier.padding(top = 40.dp))
-                            Spacer(modifier = Modifier.size(80.dp))
+                            Divider(modifier = Modifier.padding(top = 60.dp, bottom = 60.dp))
                         }
 
                     }
