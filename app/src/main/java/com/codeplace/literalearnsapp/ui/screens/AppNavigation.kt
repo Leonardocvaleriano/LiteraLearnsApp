@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.codeplace.literalearnsapp.R
 import com.codeplace.literalearnsapp.navigation.Screen
 import com.codeplace.literalearnsapp.navigation.graphs.BottomBarGraph
@@ -79,10 +80,10 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
     var loginTitle = "Login with Google"
 
     val viewModel: GoogleSignInViewModel = koinViewModel()
-    val userState by viewModel.userState.collectAsState()
+    val userDataState by viewModel.userDataState.collectAsState()
 
 
-    if (userState.data != null) {
+    if (userDataState.data != null) {
         loginId = "logout"
         loginTitle = "Logout"
     }
@@ -160,28 +161,29 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
             ModalDrawerSheet {
 
                 // Drawer Header
-                if (userState.data != null) {
+                if (userDataState.data != null) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {
                         Column {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_launcher_background),
-                                contentDescription = "User image",
+//
+                            AsyncImage(
+                                model = userDataState.data!!.profilePictureUrl,
+                                contentDescription = "Profile picture",
                                 modifier = Modifier
-                                    .padding(top = 22.dp, start = 32.dp)
+                                    .padding(top = 32.dp, start = 32.dp)
                                     .size(150.dp)
                                     .clip(shape = CircleShape)
                             )
                             Text(
                                 modifier = Modifier
                                     .padding(top = 18.dp, start = 32.dp),
-                                text = "${userState.data!!.userName}", fontSize = 26.sp
+                                text = "${userDataState.data!!.userName}", fontSize = 26.sp
                             )
                             Text(
                                 modifier = Modifier.padding(start = 32.dp),
-                                text = "${userState.data!!.userEmail}", fontSize = 14.sp
+                                text = "${userDataState.data!!.userEmail}", fontSize = 14.sp
                             )
 
                                 Divider(modifier = Modifier.padding(top = 40.dp))

@@ -30,7 +30,7 @@ class GoogleSignInViewModel(
     val state = _state.asStateFlow()
 
     private val _userDataState = MutableStateFlow(SignInResult())
-    val userState = _userDataState.asStateFlow()
+    val userDataState = _userDataState.asStateFlow()
 
 
     fun getSignInIntentSender(launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>) {
