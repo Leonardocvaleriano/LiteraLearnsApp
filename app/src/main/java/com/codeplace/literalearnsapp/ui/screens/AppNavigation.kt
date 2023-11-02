@@ -301,9 +301,14 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                                         painter = if (index == selectedBottomBarItemIndex) {
                                             navBarItem.selectedIcon
                                         } else navBarItem.unselectedIcon,
-                                        contentDescription = navBarItem.title
+                                        contentDescription = navBarItem.title,
+
                                     )
 
+                                }, label = {
+                                    Text(
+                                        text = navBarItem.title
+                                    )
                                 })
 
                         }
@@ -317,4 +322,5 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
         }
     }
 }
+
 
