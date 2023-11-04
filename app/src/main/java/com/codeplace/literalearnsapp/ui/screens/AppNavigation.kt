@@ -3,13 +3,13 @@ package com.codeplace.literalearnsapp.ui.screens
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
@@ -27,6 +27,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
@@ -36,10 +37,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -48,8 +48,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -57,21 +55,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.codeplace.literalearnsapp.R
-import com.codeplace.literalearnsapp.navigation.Screen
-import com.codeplace.literalearnsapp.navigation.graphs.BottomBarGraph
-import com.codeplace.literalearnsapp.ui.viewmodel.GoogleSignInViewModel
-import com.codeplace.literalearnsapp.ui.main.view.activity.MainActivity.*
 import com.codeplace.literalearnsapp.navigation.MenuItem
 import com.codeplace.literalearnsapp.navigation.NavBarItem
+import com.codeplace.literalearnsapp.navigation.Screen
+import com.codeplace.literalearnsapp.navigation.graphs.BottomBarGraph
+import com.codeplace.literalearnsapp.ui.main.view.activity.MainActivity.*
 import com.codeplace.literalearnsapp.ui.viewmodel.AppViewModel
+import com.codeplace.literalearnsapp.ui.viewmodel.GoogleSignInViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigation(navController: NavHostController = rememberNavController()) {
-
-
 
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -93,7 +89,6 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
     }
 
 
-
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult(),
         onResult = { result ->
@@ -109,7 +104,9 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
             id = "share",
             title = "Share",
             contentDescription = "Share",
-            textStyle = TextStyle(fontSize = 14.sp),
+            textStyle = TextStyle(
+                fontSize = 14.sp
+            ),
             selectedIcon = Icons.Filled.Share,
             unselectedIcon = Icons.Outlined.Share
 
@@ -164,7 +161,10 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
         drawerState = drawerState,
         drawerContent = {
             // Drawer contents
-            ModalDrawerSheet {
+            ModalDrawerSheet(
+                modifier = Modifier
+                    .width(300.dp)
+            ) {
 
                 // Drawer Header
                 if (userDataState.data != null) {
@@ -172,54 +172,64 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                         modifier = Modifier
                             .fillMaxWidth()
                     ) {
-                        Column {
+                        Column(
+                            modifier = Modifier
+                                .padding(start = 14.dp, end = 14.dp)
+                        ) {
 //
                             AsyncImage(
                                 model = userDataState.data!!.profilePictureUrl,
                                 contentDescription = "Profile picture",
                                 modifier = Modifier
-                                    .padding(top = 32.dp, start = 32.dp)
+                                    .padding(top = 32.dp)
                                     .size(150.dp)
-                                    .clip(shape = CircleShape)
+                                    .clip(shape = CircleShape),
                             )
                             Text(
                                 modifier = Modifier
-                                    .padding(top = 18.dp, start = 32.dp),
-                                text = "${userDataState.data!!.userName}", fontSize = 26.sp
+                                    .padding(top = 32.dp),
+                                text = "${userDataState.data!!.userName}",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontSize = 24.sp,
+
                             )
                             Text(
-                                modifier = Modifier.padding(start = 32.dp),
-                                text = "${userDataState.data!!.userEmail}", fontSize = 14.sp
+                                text = "${userDataState.data!!.userEmail}",
+                                style = MaterialTheme.typography.titleSmall,
+                                fontSize = 13.sp
                             )
-
-                                Divider(modifier = Modifier.padding(top = 60.dp, bottom = 60.dp))
-
 
                         }
 
                     }
                 } else {
-                    Box{
-                        Column {
-                            Text(modifier = Modifier
-                                .padding(top = 40.dp, start = 32.dp, end = 32.dp),
-                                text = "LiteraLearns", fontSize = 48.sp,
-                                )
-                            Divider(modifier = Modifier.padding(top = 60.dp, bottom = 60.dp))
-                        }
+                        Column(
+
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 32.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center) {
+                            Text(
+                                text = "LiteraLearns",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontSize = 32.sp,
+                            )
 
                     }
-
                 }
+                Divider(modifier = Modifier.padding(top = 32.dp, bottom = 32.dp))
+
                 // Drawer Body
                 var selectedDrawerItemIndex by rememberSaveable {
-                    mutableStateOf(0)
+                    mutableIntStateOf(0)
                 }
 
                 drawerItems.forEachIndexed { index, item ->
+
                     NavigationDrawerItem(
                         label = { Text(text = item.title) },
-                        selected = index == selectedDrawerItemIndex,
+                        selected = false,
                         onClick = {
                             selectedDrawerItemIndex = index
                             when (item.id) {
@@ -255,15 +265,14 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
     ) {
 
 
-
         Scaffold(
             topBar = {
 
-                var titleSelected = navBarItems[selectedBottomBarItemIndex].title
+                val titleSelected = navBarItems[selectedBottomBarItemIndex].title
 
                 CenterAlignedTopAppBar(
                     title = {
-                        Text(text = "$titleSelected")
+                        Text(text = titleSelected)
                     },
                     navigationIcon = {
                         IconButton(
@@ -312,7 +321,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                                         } else navBarItem.unselectedIcon,
                                         contentDescription = navBarItem.title,
 
-                                    )
+                                        )
 
                                 }, label = {
                                     Text(
