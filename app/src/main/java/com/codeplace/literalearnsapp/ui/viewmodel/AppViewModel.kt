@@ -12,6 +12,12 @@ class AppViewModel:ViewModel() {
 //        mutableStateOf(0)
 //    }
 
-    var selectedBottom = mutableStateOf(0)
+    var selectedBottomItemIndex by mutableStateOf(0)
+        private set
+
+
+    fun updateSelectedBottomItemIndex (itemIndex:Int){
+        selectedBottomItemIndex = itemIndex
+    }
 
 }

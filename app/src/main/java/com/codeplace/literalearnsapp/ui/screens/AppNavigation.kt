@@ -36,6 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -61,6 +63,7 @@ import com.codeplace.literalearnsapp.ui.viewmodel.GoogleSignInViewModel
 import com.codeplace.literalearnsapp.ui.main.view.activity.MainActivity.*
 import com.codeplace.literalearnsapp.navigation.MenuItem
 import com.codeplace.literalearnsapp.navigation.NavBarItem
+import com.codeplace.literalearnsapp.ui.viewmodel.AppViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -69,9 +72,7 @@ import org.koin.androidx.compose.koinViewModel
 fun AppNavigation(navController: NavHostController = rememberNavController()) {
 
 
-    var selectedBottomBarItemIndex by rememberSaveable {
-        mutableStateOf(0)
-    }
+
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -80,13 +81,17 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
     var loginTitle = "Login with Google"
 
     val viewModel: GoogleSignInViewModel = koinViewModel()
+    val viewModelApp = viewModel<AppViewModel>()
+
     val userDataState by viewModel.userDataState.collectAsState()
 
+    val selectedBottomBarItemIndex = viewModelApp.selectedBottomItemIndex
 
     if (userDataState.data != null) {
         loginId = "logout"
         loginTitle = "Logout"
     }
+
 
 
     val launcher = rememberLauncherForActivityResult(
@@ -128,6 +133,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
         )
 
     )
+
 
     val navBarItems = listOf(
         NavBarItem(
@@ -197,7 +203,8 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                         Column {
                             Text(modifier = Modifier
                                 .padding(top = 40.dp, start = 32.dp, end = 32.dp),
-                                text = "LiteraLearns", fontSize = 48.sp)
+                                text = "LiteraLearns", fontSize = 48.sp,
+                                )
                             Divider(modifier = Modifier.padding(top = 60.dp, bottom = 60.dp))
                         }
 
@@ -229,6 +236,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                             }
                         },
 
+
                         icon = {
                             Icon(
                                 imageVector = if (index == selectedDrawerItemIndex) {
@@ -247,8 +255,10 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
     ) {
 
 
+
         Scaffold(
             topBar = {
+
                 var titleSelected = navBarItems[selectedBottomBarItemIndex].title
 
                 CenterAlignedTopAppBar(
@@ -293,7 +303,6 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                             NavigationBarItem(
                                 selected = index == selectedBottomBarItemIndex,
                                 onClick = {
-                                    selectedBottomBarItemIndex = index
                                     navController.navigate(navBarItem.route)
                                 },
                                 icon = {
@@ -318,7 +327,11 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                 }
             }
         ) { paddingValues ->
-            BottomBarGraph(navController = navController, paddingValues = paddingValues)
+            BottomBarGraph(
+                navController = navController,
+                paddingValues = paddingValues,
+                viewModelApp
+            )
         }
     }
 }
