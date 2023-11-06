@@ -1,6 +1,7 @@
 package com.codeplace.literalearnsapp.ui.screens.welcome
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
@@ -34,10 +36,18 @@ fun WelcomeScreen(
     navController:NavController
 ) {
 
-    val pageCount = 3
+    val pages = listOf(
+        OnBoardingPage.FirstPage,
+        OnBoardingPage.SecondPage,
+        OnBoardingPage.ThirdPage,
+        OnBoardingPage.FourthPage
+    )
+
+    val pageCount = pages.size
     val pagerState = rememberPagerState(initialPage = 0) { pageCount }
 
-    HorizontalPager(state = pagerState) { page ->
+
+    HorizontalPager(state = pagerState) { position ->
         val color = if (isSystemInDarkTheme()) Color.Blue else Color.White
         //Text(text = "Page: $page")
         Column(
@@ -46,14 +56,9 @@ fun WelcomeScreen(
                 .background(color = color)
                 .padding(top = 400.dp)
         ) {
-            when (page) {
-                0 -> FirstPagerScreen()
-                1 -> SecondPagerScreen()
-                2 -> GoogleSignInScreen(navController = navController)
-            }
+            PagerScreen(pages[position])
         }
     }
-
 
     // page indicator
     Row(
@@ -77,9 +82,26 @@ fun WelcomeScreen(
     }
 }
 
+@Composable
+fun PagerScreen(onBoardingPage: OnBoardingPage){
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top){
+      Image(
+          painter = painterResource(id = onBoardingPage.image),
+          contentDescription = "Pager image"
+      )
+
+    }
+
+}
+
 
 @Composable
 fun FirstOnBoardingScreen(onBoardingPage: OnBoardingPage){
+
 
 }
 
@@ -98,11 +120,10 @@ fun FourthOnBoardingScreen(){
 }
 
 
-
 @Composable
 @Preview(showBackground = true)
 fun FirstOnBoardingScreenPreview(){
-    FirstOnBoardingScreen(onBoardingPage = OnBoardingPage.FirstPage)
+    PagerScreen(onBoardingPage = OnBoardingPage.FirstPage)
 }
 
 @Composable
