@@ -21,9 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.codeplace.literalearnsapp.ui.util.OnBoardingPage
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -74,4 +76,55 @@ fun WelcomeScreen(
         }
     }
 }
+
+
+@Composable
+fun FirstOnBoardingScreen(onBoardingPage: OnBoardingPage){
+
+}
+
+@Composable
+fun SecondOnBoardingScreen(){
+
+}
+
+@Composable
+fun ThirdOnBoardingScreen(){
+
+}
+
+@Composable
+fun FourthOnBoardingScreen(){
+}
+
+
+
+@Composable
+@Preview(showBackground = true)
+fun FirstOnBoardingScreenPreview(){
+    FirstOnBoardingScreen(onBoardingPage = OnBoardingPage.FirstPage)
+}
+
+@Composable
+@Preview(showBackground = true)
+fun SecondOnBoardingScreenPreview(){
+    SecondOnBoardingScreen()
+}
+
+@Composable
+@Preview(showBackground = true)
+fun ThirdOnBoardingScreenPreview(){
+    ThirdOnBoardingScreen()
+}
+
+
+@Composable
+@Preview(showBackground = true)
+fun FourthOnBoardingScreenPreview(){
+    FourthOnBoardingScreen()
+}
+
+
+
+
 
