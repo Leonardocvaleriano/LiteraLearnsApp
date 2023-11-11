@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.codeplace.literalearnsapp.navigation.Screen
 import com.codeplace.literalearnsapp.ui.util.OnBoardingPage
 import com.codeplace.literalearnsapp.ui.viewmodel.GoogleSignInViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -70,13 +71,15 @@ fun WelcomeScreen(
         //.background(color = color)
     ) {
 
-            SkipClickableText(
-                pagerState = pagerState,
-                pagesSize = lastPage,
-                onClick = {}
-            )
+        SkipClickableText(
+            pagerState = pagerState,
+            pagesSize = lastPage,
+            onClick = {
+                navController.popBackStack()
+                navController.navigate(route = Screen.SearchBooks.route)
+            }
 
-
+        )
 
         HorizontalPager(
             state = pagerState,
@@ -108,22 +111,20 @@ fun SkipClickableText(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(all = 16.dp)
-        ,
+            .padding(all = 16.dp),
         horizontalAlignment = Alignment.End
-    ){
+    ) {
         AnimatedVisibility(
             visible = pagerState.currentPage == pagesSize
         ) {
             Text(
-                modifier = Modifier.clickable { onClick },
+                modifier = Modifier.clickable(onClick = onClick),
                 text = "Skip",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold
             )
         }
     }
-
 
 
 }
@@ -175,7 +176,7 @@ fun SignInButton(
     ) {
 
         Button(
-            onClick = { /*TODO*/ }) {
+            onClick = { }) {
             Text(text = "Sign in")
         }
 
@@ -193,7 +194,7 @@ fun HorizontalPagerIndicator(pagerState: PagerState) {
             .height(50.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
-      verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom
     ) {
         repeat(pagerState.pageCount) { iteration ->
 

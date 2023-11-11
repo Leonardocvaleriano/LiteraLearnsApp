@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.codeplace.literalearnsapp.navigation.Screen
 import com.codeplace.literalearnsapp.ui.screens.AppNavigation
 import com.codeplace.literalearnsapp.ui.screens.welcome.WelcomeScreen
 
@@ -20,9 +21,10 @@ fun RootNavGraph(
 
         composable("welcome"){
             WelcomeScreen(navController = navController)
+
         }
 
-        composable(Graph.BOTTOM_BAR){
+        composable(Screen.SearchBooks.route){
             AppNavigation()
         }
     }
