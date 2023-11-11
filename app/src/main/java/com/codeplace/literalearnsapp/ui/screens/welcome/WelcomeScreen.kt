@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +50,8 @@ fun WelcomeScreen(
     navController: NavController
 ) {
 
+
+
     val viewModel: GoogleSignInViewModel = koinViewModel()
 
     val pages = listOf(
@@ -62,23 +65,24 @@ fun WelcomeScreen(
     val lastPage = pages.lastIndex
     val pagerState = rememberPagerState(initialPage = 0) { pagesSize }
 
-    val textColorsApp =
-        if (isSystemInDarkTheme()) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary
+    val textColorsApp = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary
+
     Column(
-        modifier = Modifier.fillMaxSize(),
+
+        modifier = Modifier
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.SpaceBetween
         //.background(color = color)
     ) {
 
         SkipClickableText(
             pagerState = pagerState,
-            pagesSize = lastPage,
+            lastPage = lastPage,
             onClick = {
                 navController.popBackStack()
                 navController.navigate(route = Screen.SearchBooks.route)
             }
-
         )
 
         HorizontalPager(
@@ -87,27 +91,21 @@ fun WelcomeScreen(
             PagerScreen(pages[position])
         }
         SignInButton(
-            pagesSize = lastPage,
+            lastPage = lastPage,
             pagerState = pagerState
         ) {
-
         }
         HorizontalPagerIndicator(pagerState)
     }
-
-
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SkipClickableText(
-
-    pagesSize: Int,
+    lastPage: Int,
     pagerState: PagerState,
     onClick: () -> Unit
-
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -115,7 +113,7 @@ fun SkipClickableText(
         horizontalAlignment = Alignment.End
     ) {
         AnimatedVisibility(
-            visible = pagerState.currentPage == pagesSize
+            visible = pagerState.currentPage == lastPage
         ) {
             Text(
                 modifier = Modifier.clickable(onClick = onClick),
@@ -125,8 +123,6 @@ fun SkipClickableText(
             )
         }
     }
-
-
 }
 
 
@@ -134,16 +130,17 @@ fun SkipClickableText(
 fun PagerScreen(onBoardingPage: OnBoardingPage) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.8f),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         Image(
             modifier = Modifier
-                .fillMaxHeight(0.7f),
+                .fillMaxHeight(0.6f)
+                .fillMaxWidth(),
             painter = painterResource(id = onBoardingPage.image),
-            contentDescription = "Pager image"
+            contentDescription = "Pager image",
+            contentScale = ContentScale.Inside
         )
         Text(
             text = onBoardingPage.title,
@@ -153,7 +150,6 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
         )
         Text(
             modifier = Modifier
-                .padding(top = 6.dp)
                 .fillMaxWidth(0.8f),
             text = onBoardingPage.description,
             style = MaterialTheme.typography.bodyMedium,
@@ -167,16 +163,16 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SignInButton(
-    pagesSize: Int,
+    lastPage: Int,
     pagerState: PagerState,
     onClick: () -> Unit
 ) {
     AnimatedVisibility(
-        visible = pagerState.currentPage == pagesSize
+        visible = pagerState.currentPage == lastPage
     ) {
 
         Button(
-            onClick = { }) {
+            onClick = onClick) {
             Text(text = "Sign in")
         }
 
@@ -191,6 +187,7 @@ fun HorizontalPagerIndicator(pagerState: PagerState) {
 
     Row(
         Modifier
+            .padding(bottom = 16.dp)
             .height(50.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
