@@ -3,6 +3,9 @@ package com.codeplace.literalearnsapp.screens
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -166,6 +170,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                     .width(300.dp)
             ) {
 
+                val color = if (isSystemInDarkTheme()) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary
                 // Drawer Header
                 if (userDataState.data != null) {
                     Box(
@@ -176,14 +181,14 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                             modifier = Modifier
                                 .padding(start = 14.dp, end = 14.dp)
                         ) {
-//
                             AsyncImage(
                                 model = userDataState.data!!.profilePictureUrl,
                                 contentDescription = "Profile picture",
                                 modifier = Modifier
                                     .padding(top = 32.dp)
                                     .size(150.dp)
-                                    .clip(shape = CircleShape),
+                                    .clip(shape = CircleShape)
+                                    .border(shape = CircleShape, border = BorderStroke(3.dp, color))
                             )
                             Text(
                                 modifier = Modifier

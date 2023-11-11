@@ -104,7 +104,6 @@ fun WelcomeScreen(
                 navController.navigate(route = Screen.SearchBooks.route)
             }
         )
-
         HorizontalPager(
             state = pagerState,
         ) { position ->
