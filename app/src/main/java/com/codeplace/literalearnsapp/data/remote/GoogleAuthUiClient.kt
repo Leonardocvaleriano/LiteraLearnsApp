@@ -1,12 +1,12 @@
-package com.codeplace.literalearnsapp.remote
+package com.codeplace.literalearnsapp.data.remote
 
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.util.Log
 import com.codeplace.literalearnsapp.R
-import com.codeplace.literalearnsapp.ui.viewmodel.model.SignInResult
-import com.codeplace.literalearnsapp.ui.viewmodel.model.UserData
+import com.codeplace.literalearnsapp.data.models.SignInResult
+import com.codeplace.literalearnsapp.data.models.UserData
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
 import com.google.android.gms.auth.api.identity.SignInClient

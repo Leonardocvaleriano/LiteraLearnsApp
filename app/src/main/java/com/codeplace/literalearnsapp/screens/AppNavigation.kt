@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.screens
+package com.codeplace.literalearnsapp.screens
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -60,8 +60,8 @@ import com.codeplace.literalearnsapp.navigation.NavBarItem
 import com.codeplace.literalearnsapp.navigation.Screen
 import com.codeplace.literalearnsapp.navigation.graphs.BottomBarGraph
 import com.codeplace.literalearnsapp.MainActivity.*
-import com.codeplace.literalearnsapp.ui.viewmodel.AppViewModel
-import com.codeplace.literalearnsapp.ui.viewmodel.GoogleSignInViewModel
+import com.codeplace.literalearnsapp.viewmodel.AppNavigationViewModel
+import com.codeplace.literalearnsapp.viewmodel.GoogleSignInViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -77,7 +77,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
     var loginTitle = "Login with Google"
 
     val viewModel: GoogleSignInViewModel = koinViewModel()
-    val viewModelApp = viewModel<AppViewModel>()
+    val viewModelApp = viewModel<AppNavigationViewModel>()
 
     val userDataState by viewModel.userDataState.collectAsState()
 

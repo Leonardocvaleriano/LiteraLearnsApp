@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.viewmodel.model
+package com.codeplace.literalearnsapp.data.models
 
 
 data class SignInResult(

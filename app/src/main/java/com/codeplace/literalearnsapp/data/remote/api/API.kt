@@ -1,7 +1,4 @@
-package com.codeplace.literalearnsapp.network
-
-import retrofit2.Response
-import retrofit2.http.*
+package com.codeplace.literalearnsapp.data.remote.api
 
 interface API {
 

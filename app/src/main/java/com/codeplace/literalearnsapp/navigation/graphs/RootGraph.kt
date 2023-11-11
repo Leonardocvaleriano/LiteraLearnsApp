@@ -5,8 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.codeplace.literalearnsapp.navigation.Screen
-import com.codeplace.literalearnsapp.ui.screens.AppNavigation
-import com.codeplace.literalearnsapp.ui.screens.welcome.WelcomeScreen
+import com.codeplace.literalearnsapp.screens.AppNavigation
+import com.codeplace.literalearnsapp.screens.WelcomeScreen
 
 @Composable
 fun RootNavGraph(

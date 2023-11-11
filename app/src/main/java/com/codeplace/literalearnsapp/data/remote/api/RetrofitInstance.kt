@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.network
+package com.codeplace.literalearnsapp.data.remote.api
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
 
-    fun getRetrofit(baseUrl:String):API{
+    fun getRetrofit(baseUrl:String): API {
 
         val logger = HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY)

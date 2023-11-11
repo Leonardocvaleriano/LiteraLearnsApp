@@ -1,21 +1,14 @@
-package com.codeplace.literalearnsapp.ui.viewmodel
+package com.codeplace.literalearnsapp.viewmodel
 
 
-import android.content.Context
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.codeplace.literalearnsapp.remote.GoogleAuthUiClient
-import com.codeplace.literalearnsapp.state.SignInState
-import com.codeplace.literalearnsapp.ui.viewmodel.model.SignInResult
-import com.codeplace.literalearnsapp.ui.viewmodel.model.UserData
-import com.google.android.gms.auth.api.identity.Identity
+import com.codeplace.literalearnsapp.data.remote.GoogleAuthUiClient
+import com.codeplace.literalearnsapp.util.SignInState
+import com.codeplace.literalearnsapp.data.models.SignInResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.screens.welcome
+package com.codeplace.literalearnsapp.screens.welcome
 
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.codeplace.literalearnsapp.navigation.graphs.Graph
-import com.codeplace.literalearnsapp.ui.viewmodel.GoogleSignInViewModel
+import com.codeplace.literalearnsapp.viewmodel.GoogleSignInViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

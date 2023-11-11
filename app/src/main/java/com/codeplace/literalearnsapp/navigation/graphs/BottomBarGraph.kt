@@ -3,19 +3,17 @@ package com.codeplace.literalearnsapp.navigation.graphs
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.codeplace.literalearnsapp.navigation.NavBarItem
 import com.codeplace.literalearnsapp.navigation.Screen
-import com.codeplace.literalearnsapp.ui.screens.LearnsScreen
-import com.codeplace.literalearnsapp.ui.screens.MyBooksScreen
-import com.codeplace.literalearnsapp.ui.screens.SearchBooksScreen
-import com.codeplace.literalearnsapp.ui.viewmodel.AppViewModel
+import com.codeplace.literalearnsapp.screens.LearnsScreen
+import com.codeplace.literalearnsapp.screens.MyBooksScreen
+import com.codeplace.literalearnsapp.screens.SearchBooksScreen
+import com.codeplace.literalearnsapp.viewmodel.AppNavigationViewModel
 
 @Composable
-fun BottomBarGraph(navController:NavHostController, paddingValues:PaddingValues, viewModelApp: AppViewModel){
+fun BottomBarGraph(navController:NavHostController, paddingValues:PaddingValues, viewModelApp: AppNavigationViewModel){
 
 
     NavHost(

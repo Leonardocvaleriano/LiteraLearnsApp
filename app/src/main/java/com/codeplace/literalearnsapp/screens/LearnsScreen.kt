@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.screens
+package com.codeplace.literalearnsapp.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
