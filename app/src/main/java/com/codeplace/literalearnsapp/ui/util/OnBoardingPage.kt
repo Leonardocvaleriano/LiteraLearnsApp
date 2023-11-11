@@ -21,7 +21,7 @@ sealed class OnBoardingPage (
     object ThirdPage:OnBoardingPage(
         image = R.drawable.dont_forget,
         title = "In Construction",
-        description = "In construction.."
+        description = "Gather all your books and all their respective knowledge in just one placeGather all your books and all their respective knowledge in just one place."
     )
 
     object FourthPage:OnBoardingPage(

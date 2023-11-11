@@ -1,40 +1,54 @@
 package com.codeplace.literalearnsapp.ui.screens.welcome
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.codeplace.literalearnsapp.ui.util.OnBoardingPage
-
+import com.codeplace.literalearnsapp.ui.viewmodel.GoogleSignInViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WelcomeScreen(
-    navController:NavController
+    navController: NavController
 ) {
+
+    val viewModel: GoogleSignInViewModel = koinViewModel()
 
     val pages = listOf(
         OnBoardingPage.FirstPage,
@@ -43,106 +57,202 @@ fun WelcomeScreen(
         OnBoardingPage.FourthPage
     )
 
-    val pageCount = pages.size
-    val pagerState = rememberPagerState(initialPage = 0) { pageCount }
+    val pagesSize = pages.size
+    val lastPage = pages.lastIndex
+    val pagerState = rememberPagerState(initialPage = 0) { pagesSize }
+
+    val textColorsApp =
+        if (isSystemInDarkTheme()) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+        //.background(color = color)
+    ) {
+
+            SkipClickableText(
+                pagerState = pagerState,
+                pagesSize = lastPage,
+                onClick = {}
+            )
 
 
-    HorizontalPager(state = pagerState) { position ->
-        val color = if (isSystemInDarkTheme()) Color.Blue else Color.White
-        //Text(text = "Page: $page")
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = color)
-                .padding(top = 400.dp)
-        ) {
+
+        HorizontalPager(
+            state = pagerState,
+        ) { position ->
             PagerScreen(pages[position])
+        }
+        SignInButton(
+            pagesSize = lastPage,
+            pagerState = pagerState
+        ) {
+
+        }
+        HorizontalPagerIndicator(pagerState)
+    }
+
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun SkipClickableText(
+
+    pagesSize: Int,
+    pagerState: PagerState,
+    onClick: () -> Unit
+
+) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(all = 16.dp)
+        ,
+        horizontalAlignment = Alignment.End
+    ){
+        AnimatedVisibility(
+            visible = pagerState.currentPage == pagesSize
+        ) {
+            Text(
+                modifier = Modifier.clickable { onClick },
+                text = "Skip",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 
-    // page indicator
+
+
+}
+
+
+@Composable
+fun PagerScreen(onBoardingPage: OnBoardingPage) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.8f),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Image(
+            modifier = Modifier
+                .fillMaxHeight(0.7f),
+            painter = painterResource(id = onBoardingPage.image),
+            contentDescription = "Pager image"
+        )
+        Text(
+            text = onBoardingPage.title,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            modifier = Modifier
+                .padding(top = 6.dp)
+                .fillMaxWidth(0.8f),
+            text = onBoardingPage.description,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Light,
+            textAlign = TextAlign.Center,
+        )
+    }
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun SignInButton(
+    pagesSize: Int,
+    pagerState: PagerState,
+    onClick: () -> Unit
+) {
+    AnimatedVisibility(
+        visible = pagerState.currentPage == pagesSize
+    ) {
+
+        Button(
+            onClick = { /*TODO*/ }) {
+            Text(text = "Sign in")
+        }
+
+    }
+
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun HorizontalPagerIndicator(pagerState: PagerState) {
+
     Row(
         Modifier
             .height(50.dp)
-            .fillMaxWidth()
-            .padding(PaddingValues(bottom = 6.dp)),
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.Bottom
+      verticalAlignment = Alignment.Bottom
     ) {
-        repeat(pageCount) { iteration ->
+        repeat(pagerState.pageCount) { iteration ->
+
             val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
             Box(
                 modifier = Modifier
                     .padding(2.dp)
                     .clip(CircleShape)
                     .background(color)
-                    .size(20.dp)
+                    .size(12.dp)
             )
         }
     }
 }
 
-@Composable
-fun PagerScreen(onBoardingPage: OnBoardingPage){
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top){
-      Image(
-          painter = painterResource(id = onBoardingPage.image),
-          contentDescription = "Pager image"
-      )
-
-    }
-
-}
-
 
 @Composable
-fun FirstOnBoardingScreen(onBoardingPage: OnBoardingPage){
+fun FirstOnBoardingScreen(onBoardingPage: OnBoardingPage) {
 
 
 }
 
 @Composable
-fun SecondOnBoardingScreen(){
+fun SecondOnBoardingScreen() {
 
 }
 
 @Composable
-fun ThirdOnBoardingScreen(){
+fun ThirdOnBoardingScreen() {
 
 }
 
 @Composable
-fun FourthOnBoardingScreen(){
+fun FourthOnBoardingScreen() {
 }
-
 
 @Composable
 @Preview(showBackground = true)
-fun FirstOnBoardingScreenPreview(){
+fun FirstOnBoardingScreenPreview() {
     PagerScreen(onBoardingPage = OnBoardingPage.FirstPage)
 }
 
 @Composable
 @Preview(showBackground = true)
-fun SecondOnBoardingScreenPreview(){
-    SecondOnBoardingScreen()
+fun SecondOnBoardingScreenPreview() {
+    PagerScreen(onBoardingPage = OnBoardingPage.SecondPage)
 }
 
 @Composable
 @Preview(showBackground = true)
-fun ThirdOnBoardingScreenPreview(){
-    ThirdOnBoardingScreen()
+fun ThirdOnBoardingScreenPreview() {
+    PagerScreen(onBoardingPage = OnBoardingPage.ThirdPage)
 }
 
 
 @Composable
 @Preview(showBackground = true)
-fun FourthOnBoardingScreenPreview(){
-    FourthOnBoardingScreen()
+fun FourthOnBoardingScreenPreview() {
+    PagerScreen(onBoardingPage = OnBoardingPage.FourthPage)
 }
 
 

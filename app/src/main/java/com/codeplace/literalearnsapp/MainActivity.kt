@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.ui.main.view.activity
+package com.codeplace.literalearnsapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val currentStartDestination = "bottom_bar"
+        val currentStartDestination = "welcome"
 
         setContent {
             LiteraLearnsAppTheme {
