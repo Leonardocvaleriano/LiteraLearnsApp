@@ -1,5 +1,7 @@
 package com.codeplace.literalearnsapp.screens
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -24,6 +26,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,21 +39,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ComponentActivity
 import androidx.navigation.NavController
 import com.codeplace.literalearnsapp.navigation.Screen
 import com.codeplace.literalearnsapp.util.OnBoardingPage
+import com.codeplace.literalearnsapp.util.SignInState
 import com.codeplace.literalearnsapp.viewmodel.GoogleSignInViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WelcomeScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: GoogleSignInViewModel = koinViewModel()
 ) {
 
+    val state by viewModel.state.collectAsState()
 
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult() ,
+        onResult = {result ->
+            if (result.resultCode == ComponentActivity.RESULT_OK){
+                viewModel.getLauncherForActivityResult(result = result)
+            }
+        }
+    )
 
-    val viewModel: GoogleSignInViewModel = koinViewModel()
+    LaunchedEffect(key1 = state.isSignInSuccessful){
+        if (state.isSignInSuccessful){
+            navController.popBackStack()
+            navController.navigate(Screen.SearchBooks.route)
+        }
+
+    }
+
 
     val pages = listOf(
         OnBoardingPage.FirstPage,
@@ -90,6 +114,8 @@ fun WelcomeScreen(
             lastPage = lastPage,
             pagerState = pagerState
         ) {
+            viewModel.signIn(launcher = launcher)
+
         }
         HorizontalPagerIndicator(pagerState)
     }

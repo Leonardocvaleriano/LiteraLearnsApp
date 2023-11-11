@@ -85,7 +85,7 @@ fun GoogleSignInScreen(navController:NavController){
         Button( modifier=Modifier
             .padding(PaddingValues(top = 50.dp))
             , onClick = {
-                viewModel.getSignInIntentSender(launcher = launcher)
+                viewModel.signIn(launcher = launcher)
             }) {
             Text(text = "Sign in", textAlign = TextAlign.Center)
         }

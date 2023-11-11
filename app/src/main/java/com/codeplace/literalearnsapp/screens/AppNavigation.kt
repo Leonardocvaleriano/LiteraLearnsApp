@@ -236,7 +236,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                                 "share" -> {}
                                 "about" -> {}
                                 "login" -> {
-                                    viewModel.getSignInIntentSender(launcher)
+                                    viewModel.signIn(launcher)
                                 }
 
                                 "logout" -> {

@@ -26,7 +26,7 @@ class GoogleSignInViewModel(
     val userDataState = _userDataState.asStateFlow()
 
 
-    fun getSignInIntentSender(launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>) {
+    fun signIn(launcher: ManagedActivityResultLauncher<IntentSenderRequest, ActivityResult>) {
         viewModelScope.launch {
             val signInIntentSender = googleAuthUiClient.signIn()
             launcher.launch(
