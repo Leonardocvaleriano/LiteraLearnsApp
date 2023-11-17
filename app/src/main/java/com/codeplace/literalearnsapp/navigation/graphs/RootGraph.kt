@@ -5,8 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.codeplace.literalearnsapp.navigation.Screen
-import com.codeplace.literalearnsapp.screens.AppNavigation
-import com.codeplace.literalearnsapp.screens.WelcomeScreen
+import com.codeplace.literalearnsapp.presentation.appentrynavigation.AppEntryNavigation
+import com.codeplace.literalearnsapp.presentation.welcome.WelcomeScreen
 
 @Composable
 fun RootNavGraph(
@@ -25,7 +25,8 @@ fun RootNavGraph(
         }
 
         composable(Screen.SearchBooks.route){
-            AppNavigation()
+
+            AppEntryNavigation()
         }
     }
 

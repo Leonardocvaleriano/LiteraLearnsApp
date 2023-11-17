@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.screens
+package com.codeplace.literalearnsapp.presentation.appentrynavigation
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -49,7 +49,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -59,19 +58,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.codeplace.literalearnsapp.R
+import com.codeplace.literalearnsapp.navigation.graphs.BottomBarGraph
+import com.codeplace.literalearnsapp.MainActivity.*
 import com.codeplace.literalearnsapp.navigation.MenuItem
 import com.codeplace.literalearnsapp.navigation.NavBarItem
 import com.codeplace.literalearnsapp.navigation.Screen
-import com.codeplace.literalearnsapp.navigation.graphs.BottomBarGraph
-import com.codeplace.literalearnsapp.MainActivity.*
-import com.codeplace.literalearnsapp.viewmodel.AppNavigationViewModel
-import com.codeplace.literalearnsapp.viewmodel.GoogleSignInViewModel
+import com.codeplace.literalearnsapp.presentation.GoogleSignInViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppNavigation(navController: NavHostController = rememberNavController()) {
+fun AppEntryNavigation(navController: NavHostController = rememberNavController()) {
 
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)

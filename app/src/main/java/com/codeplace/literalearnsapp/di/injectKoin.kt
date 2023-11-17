@@ -1,7 +1,7 @@
 package com.codeplace.literalearnsapp.di
 
 import com.codeplace.literalearnsapp.data.remote.GoogleAuthUiClient
-import com.codeplace.literalearnsapp.viewmodel.GoogleSignInViewModel
+import com.codeplace.literalearnsapp.presentation.GoogleSignInViewModel
 import com.google.android.gms.auth.api.identity.Identity
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel

@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.screens
+package com.codeplace.literalearnsapp.presentation.welcome
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -42,9 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ComponentActivity
 import androidx.navigation.NavController
 import com.codeplace.literalearnsapp.navigation.Screen
+import com.codeplace.literalearnsapp.presentation.GoogleSignInViewModel
 import com.codeplace.literalearnsapp.util.OnBoardingPage
-import com.codeplace.literalearnsapp.util.SignInState
-import com.codeplace.literalearnsapp.viewmodel.GoogleSignInViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -55,7 +54,6 @@ fun WelcomeScreen(
 ) {
 
     val state by viewModel.state.collectAsState()
-
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartIntentSenderForResult() ,
         onResult = {result ->
@@ -72,7 +70,6 @@ fun WelcomeScreen(
         }
 
     }
-
 
     val pages = listOf(
         OnBoardingPage.FirstPage,
@@ -198,7 +195,6 @@ fun SignInButton(
         }
 
     }
-
 
 }
 

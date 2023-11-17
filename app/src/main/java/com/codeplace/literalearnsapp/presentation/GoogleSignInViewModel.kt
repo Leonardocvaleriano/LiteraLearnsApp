@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.viewmodel
+package com.codeplace.literalearnsapp.presentation
 
 
 import androidx.activity.compose.ManagedActivityResultLauncher

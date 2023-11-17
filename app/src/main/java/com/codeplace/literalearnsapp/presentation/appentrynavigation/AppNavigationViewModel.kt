@@ -1,4 +1,4 @@
-package com.codeplace.literalearnsapp.viewmodel
+package com.codeplace.literalearnsapp.presentation.appentrynavigation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

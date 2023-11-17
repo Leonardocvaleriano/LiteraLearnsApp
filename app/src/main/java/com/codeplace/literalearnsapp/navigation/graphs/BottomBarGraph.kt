@@ -7,10 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.codeplace.literalearnsapp.navigation.Screen
-import com.codeplace.literalearnsapp.screens.LearnsScreen
-import com.codeplace.literalearnsapp.screens.MyBooksScreen
-import com.codeplace.literalearnsapp.screens.SearchBooksScreen
-import com.codeplace.literalearnsapp.viewmodel.AppNavigationViewModel
+import com.codeplace.literalearnsapp.presentation.learns.LearnsScreen
+import com.codeplace.literalearnsapp.presentation.mybookslist.MyBooksScreen
+import com.codeplace.literalearnsapp.presentation.bookslist.SearchBooksScreen
+import com.codeplace.literalearnsapp.presentation.appentrynavigation.AppNavigationViewModel
 
 @Composable
 fun BottomBarGraph(navController:NavHostController, paddingValues:PaddingValues, viewModelApp: AppNavigationViewModel){
