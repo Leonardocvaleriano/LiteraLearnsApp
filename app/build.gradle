@@ -122,13 +122,12 @@ dependencies {
     // Glide with compose
     implementation "com.github.bumptech.glide:compose:1.0.0-alpha.5"
 
-    // Koin with compose
+    // Koin with compose - Dependency Injection with compose
     def koin_version = "3.5.0"
-    // Dependency Injection with compose
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
 
-
-
+    // Splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 
     // Old implementations

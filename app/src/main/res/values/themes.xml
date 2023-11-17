@@ -14,6 +14,14 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-
     </style>
+
+
+    <!-- App starting theme. -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo_splashscreen</item>
+        <item name="postSplashScreenTheme">@style/Theme.LiteraLearnsApp</item>
+    </style>
+
 </resources>
