@@ -19,6 +19,12 @@
     <string name="learns">learns</string>
     <string name="my_books">my_books</string>
     <string name="search_books">search_books\n</string>
+    <string name="books">books</string>
+    <string name="share">share</string>
+    <string name="about">about</string>
+    <string name="logout">logout</string>
+    <string name="login">login</string>
+    <string name="welcome">welcome</string>
 
 
 </resources>

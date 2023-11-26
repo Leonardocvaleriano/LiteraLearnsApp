@@ -21,7 +21,7 @@ fun MyBooksScreen() {
 
         Text(
             textAlign = TextAlign.Center,
-            text = "My Books",
+            text = "My BooksInfoDto",
         )
 
     }

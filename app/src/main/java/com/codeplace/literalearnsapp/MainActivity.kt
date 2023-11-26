@@ -9,20 +9,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.codeplace.literalearnsapp.navigation.graphs.RootNavGraph
-import com.codeplace.literalearnsapp.ui.theme.LiteraLearnsAppTheme
+import com.codeplace.literalearnsapp.presentation.navigation.util.Screen
+import com.codeplace.literalearnsapp.presentation.navigation.graphs.RootNavGraph
+import com.codeplace.literalearnsapp.presentation.googlesignIn.GoogleSignInViewModel
+import com.codeplace.literalearnsapp.presentation.splash.SplashScreenViewModel
+import com.codeplace.literalearnsapp.presentation.ui.theme.LiteraLearnsAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     val userFirstAccess: Boolean = false
     var firstPage: String = ""
 
-    private lateinit var navController: NavHostController
-
-
+    private lateinit var navController1: NavHostController
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +34,7 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { viewModel.isLoading.value }
 
-        val currentStartDestination = "welcome"
+        val currentStartDestination = Screen.Welcome.route
 
         setContent {
             LiteraLearnsAppTheme {
@@ -39,11 +43,17 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    navController = rememberNavController()
-                    RootNavGraph(currentStartDestination, navController = navController)
+
+                    val googleViewModel = hiltViewModel<GoogleSignInViewModel>()
+                    val singInState = googleViewModel.state
+
+                    navController1 = rememberNavController()
+                    RootNavGraph(
+                        currentStartDestination = currentStartDestination,
+                        navController1 = navController1,
+                    )
 
                 }
-
             }
         }
     }
